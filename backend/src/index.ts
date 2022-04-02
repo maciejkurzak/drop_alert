@@ -20,7 +20,7 @@ import {
 } from 'typescript';
 
 import { config, months } from './config/config.js';
-import { generateImages } from './handlers/generateImage.js';
+import { generateImage } from './handlers/generateImage.js';
 import { saveImage } from './handlers/saveImage.js';
 
 // CANVAS FONTS
@@ -44,15 +44,12 @@ app.get('/', (req, res) => {
 
 // ===================================================
 
-// GENERATING IMAGE
+// GENERATING AND SAVING IMAGES
 
-const image = await generateImages(config);
-
-// ===================================================
-
-// SAVING IMAGE
-
-saveImage(image);
+for (let i = 0; i < config.imagesNumber; i++) {
+  const image = await generateImage(config, i + 1);
+  saveImage(image, i + 1);
+}
 
 // ===================================================
 

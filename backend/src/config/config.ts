@@ -1,7 +1,6 @@
 export const dropApps: string[] = ['adidas CONFIRMED', 'Nike SNKRS', 'Nike'];
 
 interface configProps {
-  currentImage: number;
   imagesNumber: number;
   shoeModel: string;
   shoeColor: string;
@@ -35,7 +34,6 @@ export const months: string[] = [
 ];
 
 export const config: configProps = {
-  currentImage: 1,
   imagesNumber: 3,
   shoeModel: 'SB Dunk High Pro',
   shoeColor: 'Mineral Slate Suede',
