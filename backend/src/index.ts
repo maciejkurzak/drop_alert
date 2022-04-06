@@ -1,27 +1,39 @@
 // IMPORTS
 
 import express from 'express';
+const router = express.Router();
+const app: express.Application = express();
 
-import Canvas from 'canvas';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(cors());
+
+import mongoose from 'mongoose';
+
+import { authRoute } from './routes/Auth.route.js';
+app.use('/api/auth', authRoute);
+
+import dbConn from './handlers/initDB.js';
+import { debug } from './handlers/chalkFunctions.js';
+
+import { UserSchema, UserModel } from './models/User.model.js';
+
 import canvasPkg from 'canvas';
 const { registerFont, createCanvas } = canvasPkg;
 
 import path from 'path';
 
-import figlet from 'figlet';
-
-import { initMsg, debug, error, warning } from './handlers/chalkFunctions.js';
-
-import {
-  collapseTextChangeRangesAcrossMultipleVersions,
-  createTextChangeRange,
-  NumberLiteralType,
-  StringLiteralLike,
-} from 'typescript';
-
-import { config, months } from './config/config.js';
+import { config, port } from './config/config.js';
 import { generateImage } from './handlers/generateImage.js';
 import { saveImage } from './handlers/saveImage.js';
+import listeningMessage from './handlers/listeningMessage.js';
+
+// ===================================================
 
 // CANVAS FONTS
 
@@ -34,9 +46,6 @@ registerFont(path.resolve('./src/assets/fonts/Rubik/Rubik-VariableFont_wght.ttf'
 // EXPRESS
 
 // Initialize the express engine
-const app: express.Application = express();
-// Take a port 3000 for running server.
-const port: number = 5100;
 // Handling '/' Request
 app.get('/', (req, res) => {
   res.send('TypeScript With Expresss');
@@ -56,26 +65,18 @@ for (let i = 0; i < config.imagesNumber; i++) {
 // SERVING EXPRESS BACKEND
 
 app.listen(port, () => {
-  console.log('\n');
-  figlet.text(
-    'drop_alert',
-    {
-      // font: 'Dr Pepper',
-      font: 'Larry 3D',
-      // font: 'Rectangles',
-    },
-    function (err: any, data: any) {
-      console.log(data);
-    }
-  );
-  setTimeout(() => {
-    initMsg('\n');
-    initMsg(`                ╔════════════════════════════════╗`);
-    initMsg(`                ║                                ║`);
-    initMsg(`                ║           drop_alert           ║`);
-    initMsg(`                ║     http://localhost:${port}/     ║`);
-    initMsg(`                ║                                ║`);
-    initMsg(`                ╚════════════════════════════════╝`);
-    initMsg('\n');
-  }, 100);
+  listeningMessage(port);
 });
+
+// ===================================================
+
+// CONNECTING TO DATABASE
+
+await mongoose
+  .connect('mongodb://localhost:27017/drop_alert')
+  .then(() => {
+    debug('Connection estabislished with MongoDB');
+  })
+  .catch((error) => console.error(error.message));
+
+dbConn();

@@ -1,3 +1,5 @@
+export const port: number = 5100;
+
 export const dropApps: string[] = ['adidas CONFIRMED', 'Nike SNKRS', 'Nike'];
 
 interface configProps {
