@@ -15,9 +15,6 @@ app.use(cors());
 
 import mongoose from 'mongoose';
 
-import { authRoute } from './routes/Auth.route.js';
-app.use('/api/auth', authRoute);
-
 import dbConn from './handlers/initDB.js';
 import { debug } from './handlers/chalkFunctions.js';
 
@@ -50,6 +47,9 @@ registerFont(path.resolve('./src/assets/fonts/Rubik/Rubik-VariableFont_wght.ttf'
 app.get('/', (req, res) => {
   res.send('TypeScript With Expresss');
 });
+
+import { authRoute } from './routes/Auth.route.js';
+app.use('/api/auth', authRoute);
 
 // ===================================================
 

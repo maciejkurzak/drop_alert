@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+
 import './App.css';
 
-function App() {
+import { Routes, Route, Link } from 'react-router-dom';
+import SideBar from './components/Sidebar.styled';
+import AddPost from './components/AddPost.styled';
+import Posts from './components/Posts.styled';
+import Login from './components/Login.styled';
+
+import useToken from './hooks/useToken';
+
+const App = () => {
+  const { token, setToken } = useToken();
+
+  if (!token) {
+    return <Login setToken={setToken} />;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          123 <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SideBar />
+      <Routes>
+        <Route path="/" element={<Posts />} />
+        <Route path="add-post" element={<AddPost />} />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;

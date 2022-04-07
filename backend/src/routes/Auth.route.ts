@@ -40,18 +40,26 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+  console.log(req.body);
   try {
     const { error } = loginValidator(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ error: error.details[0].message });
 
     //UserExistCheck
     const user = await UserModel.findOne({ username: req.body.username });
-    if (!user) return res.status(400).send('Account does not exist with provided username and password combination.');
+    if (!user)
+      return res.status(400).send({ error: 'Account does not exist with provided username and password combination.' });
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Incorrect Password');
+    if (!validPassword) return res.status(400).send({ error: 'Incorrect Password' });
 
-    res.send('Login Successful!');
+    res.send({
+      token: 'test123',
+    });
+
+    console.log(`User ${user.username} logged in.`);
+
+    // res.send('Login Successful!');
   } catch (err: any) {
     console.error(err.message);
   }
