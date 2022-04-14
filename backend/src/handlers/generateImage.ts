@@ -3,9 +3,7 @@ import canvasPkg from 'canvas';
 import { debug } from 'console';
 const { registerFont, createCanvas } = canvasPkg;
 
-import { months } from '../config/config.js';
-
-// import { configProps } from '../config/config';
+import { months } from '../config/configProps.js';
 
 export const generateImage = async (config: any, number: number) => {
   // creating canva

@@ -2,7 +2,7 @@ POST http://localhost:5100/api/auth/register
 content-type: application/json
 
 {
-    "email":"test@test.com",
-    "username":"test123",
-    "password":"test123"
+    "email":"szef@szefoski.com",
+    "username":"szef",
+    "password":"szef123"
 }

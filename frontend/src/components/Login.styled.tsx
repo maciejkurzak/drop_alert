@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useStore } from '../store/userData';
 
 const StyledLogin = styled.div`
   display: flex;
@@ -26,14 +27,23 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
   const [username, setUserName]: any[] = useState();
   const [password, setPassword]: any[] = useState();
 
+  const updateLoggedUser = useStore((store) => store.updateLoggedUser);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const token = await loginUser({
+    const loginResponse = await loginUser({
       username,
       password,
     });
-    token ? console.log(token) : console.log('error');
-    setToken(token);
+    const token = loginResponse.token;
+
+    const loggedUser = loginResponse.loggedUser;
+
+    updateLoggedUser({ loggedUser });
+
+    setToken({ token });
+
+    window.location.reload();
   };
 
   return (
@@ -64,3 +74,6 @@ Login.propTypes = {
 };
 
 export default Login;
+function updateLoggedUser(arg0: { loggedUser: any }) {
+  throw new Error('Function not implemented.');
+}

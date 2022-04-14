@@ -1,4 +1,4 @@
-GET http://localhost:5100/api/auth/login
+POST http://localhost:5100/api/auth/login
 content-type: application/json
 
 {

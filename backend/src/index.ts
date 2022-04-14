@@ -51,14 +51,23 @@ app.get('/', (req, res) => {
 import { authRoute } from './routes/Auth.route.js';
 app.use('/api/auth', authRoute);
 
+import { postsRoute } from './routes/Posts.route.js';
+app.use('/api/posts', postsRoute);
+
+import { postRoute } from './routes/Post.route.js';
+app.use('/api/post/', postRoute);
+
+import { addPostRoute } from './routes/AddPost.route.js';
+app.use('/api/add-post', addPostRoute);
+
 // ===================================================
 
 // GENERATING AND SAVING IMAGES
 
-for (let i = 0; i < config.imagesNumber; i++) {
-  const image = await generateImage(config, i + 1);
-  saveImage(image, i + 1);
-}
+// for (let i = 0; i < config.imagesNumber; i++) {
+//   const image = await generateImage(config, i + 1);
+//   saveImage(image, i + 1);
+// }
 
 // ===================================================
 

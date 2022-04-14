@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import useToken from '../hooks/useToken';
 import LoggedUser from './LoggedUser.styled';
 
 const StyledSideBar = styled.div`
@@ -9,6 +10,9 @@ const StyledSideBar = styled.div`
   width: 250px;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 0 1rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
   .header {
     display: flex;
     align-items: center;
@@ -72,28 +76,37 @@ const StyledSideBar = styled.div`
   }
 `;
 
-const SideBar = () => (
-  <StyledSideBar>
-    <div className="header">drop_alert</div>
-    <hr />
-    <LoggedUser />
+const SideBar = () => {
+  const { token, setToken } = useToken();
 
-    <div className="links">
-      <NavLink to="/">
-        <i className="ri-grid-fill"></i>
-        <p>Posts</p>
-      </NavLink>
-      <NavLink to="/add-post">
-        <i className="ri-file-add-fill"></i>
-        <p>Add Post</p>
-      </NavLink>
-    </div>
+  const logOut = () => {
+    setToken('');
+    window.location.reload();
+  };
 
-    <div className="logout">
-      <i className="ri-logout-box-r-fill"></i>
-      <p>Log out</p>
-    </div>
-  </StyledSideBar>
-);
+  return (
+    <StyledSideBar>
+      <div className="header">drop_alert</div>
+      <hr />
+      <LoggedUser />
+
+      <div className="links">
+        <NavLink to="/posts">
+          <i className="ri-grid-fill"></i>
+          <p>Posts</p>
+        </NavLink>
+        <NavLink to="/add-post">
+          <i className="ri-file-add-fill"></i>
+          <p>Add Post</p>
+        </NavLink>
+      </div>
+
+      <div className="logout" onClick={logOut}>
+        <i className="ri-logout-box-r-fill"></i>
+        <p>Log out</p>
+      </div>
+    </StyledSideBar>
+  );
+};
 
 export default SideBar;

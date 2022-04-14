@@ -2,7 +2,7 @@ import Joi from '@hapi/joi';
 
 const registrationValidator = (data: any) => {
   const schema = Joi.object({
-    username: Joi.string().min(6).required().alphanum(),
+    username: Joi.string().min(4).required().alphanum(),
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required(),
     role: Joi.string(),
@@ -12,7 +12,7 @@ const registrationValidator = (data: any) => {
 
 const loginValidator = (data: any) => {
   const schema = Joi.object({
-    username: Joi.string().min(6).required(),
+    username: Joi.string().min(4).required(),
     password: Joi.string().min(6).required(),
   });
   return schema.validate(data);

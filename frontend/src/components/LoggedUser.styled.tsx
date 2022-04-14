@@ -1,5 +1,6 @@
-import { stringify } from 'querystring';
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import { useStore } from '../store/userData';
 
 interface StyledUserAvatarProps {
   src: string;
@@ -39,14 +40,20 @@ const StyledLoggedUser = styled.div`
   }
 `;
 
-const LoggedUser = () => (
-  <StyledLoggedUser className="logged-user">
-    <UserAvatar />
-    <div className="user-data">
-      <div className="name">Użyszkodnik</div>
-      <div className="role">Administrator</div>
-    </div>
-  </StyledLoggedUser>
-);
+const LoggedUser = () => {
+  const loggedUser = JSON.parse(
+    useStore((state) => state.loggedUser)
+  ).loggedUser;
+
+  return (
+    <StyledLoggedUser className="logged-user">
+      <UserAvatar />
+      <div className="user-data">
+        <div className="name">{loggedUser.username}</div>
+        <div className="role">{loggedUser.role}</div>
+      </div>
+    </StyledLoggedUser>
+  );
+};
 
 export default LoggedUser;

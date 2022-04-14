@@ -1,39 +1,6 @@
+import { configProps } from './configProps';
+
 export const port: number = 5100;
-
-export const dropApps: string[] = ['adidas CONFIRMED', 'Nike SNKRS', 'Nike'];
-
-interface configProps {
-  imagesNumber: number;
-  shoeModel: string;
-  shoeColor: string;
-  retailPrice: string;
-  resellPrice?: string;
-  dateTime: dateTimeProps;
-  dropType: 'LEO' | 'DAN' | null;
-  app: 'adidas CONFIRMED' | 'Nike SNKRS' | 'Nike';
-}
-
-interface dateTimeProps {
-  day: number;
-  month: number;
-  year: number;
-  time: string;
-}
-
-export const months: string[] = [
-  'stycznia',
-  'lutego',
-  'marca',
-  'kwietnia',
-  'maja',
-  'czerwca',
-  'lipca',
-  'sierpnia',
-  'września',
-  'października',
-  'listopada',
-  'grudnia',
-];
 
 export const config: configProps = {
   imagesNumber: 3,

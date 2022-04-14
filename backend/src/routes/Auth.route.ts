@@ -4,6 +4,8 @@ const router = express.Router();
 import bcrypt from 'bcrypt';
 const salt = await bcrypt.genSalt(10);
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { UserSchema, UserModel } from '../models/User.model.js';
 
 import { registrationValidator, loginValidator } from '../handlers/validator.js';
@@ -31,7 +33,7 @@ router.post('/register', async (req, res) => {
       password: hashPassword,
     });
 
-    const savedUser = await user.save();
+    await user.save();
     // res.send(savedUser);
     res.send('Register Successful!');
   } catch (err: any) {
@@ -39,8 +41,10 @@ router.post('/register', async (req, res) => {
   }
 });
 
+const loggedUsers: any = [];
+
 router.post('/login', async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const { error } = loginValidator(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
@@ -53,8 +57,26 @@ router.post('/login', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send({ error: 'Incorrect Password' });
 
+    const userToken = uuidv4();
+
+    const oldLoggedUser = loggedUsers.find((user: any) => user.username === req.body.username);
+    const index = loggedUsers.indexOf(oldLoggedUser);
+    index >= 0 ? loggedUsers.splice(index, 1) : null;
+
+    loggedUsers.push({
+      token: userToken,
+      username: user.username,
+    });
+
+    // console.log(loggedUsers);
+
     res.send({
-      token: 'test123',
+      token: userToken,
+      loggedUser: {
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
     });
 
     console.log(`User ${user.username} logged in.`);
@@ -65,4 +87,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-export { router as authRoute };
+export { router as authRoute, loggedUsers };
