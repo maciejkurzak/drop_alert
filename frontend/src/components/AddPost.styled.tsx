@@ -134,6 +134,9 @@ const AddPost = () => {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
   const [formData, setFormData] = useState({});
+  const [files, setFiles]: [any, any] = useState(new FormData());
+
+  const maxSize = 5242880;
 
   const redirectToCreatedPost = () => {
     navigate('/posts');
@@ -142,8 +145,10 @@ const AddPost = () => {
   const submitForm = (e: any) => {
     e.preventDefault();
 
+    console.log(files);
+
     axios
-      .post('http://localhost:5100/api/add-post', { token, formData })
+      .post('http://localhost:5100/api/add-post', { token, formData, files })
       .then((res) => {
         if (!res.data.isTokenValid) {
           setToken('');
@@ -173,38 +178,47 @@ const AddPost = () => {
       reader.onload = () => {
         // Do whatever you want with the file contents
         const binaryStr = reader.result;
-        console.log(binaryStr);
       };
       reader.readAsArrayBuffer(file);
+
+      console.log(JSON.stringify(file));
+      // setFiles(...files, file);
+
+      setFiles(
+        acceptedFiles.map((file: any) => {
+          // Update the formData object
+          files.append(
+            'file', // property co akceptuje backend
+            file, // blob
+            file.name // nazwa pliku
+          );
+          return Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          });
+        })
+      );
     });
   }, []);
 
-  const [files, setFiles]: [any, any] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/jpeg,image/png',
-    onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
+    minSize: 0,
+    maxSize: maxSize,
+    onDrop,
   });
 
-  const thumbs = files.map((file: any) => (
-    <Thumb key={file.name}>
-      <ThumbInner>
-        <Img src={file.preview} alt="" />
-      </ThumbInner>
-    </Thumb>
-  ));
+  // const thumbs = files.map((file: any) => (
+  //   <Thumb key={file.name}>
+  //     <ThumbInner>
+  //       <Img src={file.preview} alt="" />
+  //     </ThumbInner>
+  //   </Thumb>
+  // ));
 
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks
-    files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  }, [files]);
+  // useEffect(() => {
+  //   // Make sure to revoke the data uris to avoid memory leaks
+  //   files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+  // }, [files]);
 
   return (
     <StyledAddPost>
@@ -217,17 +231,15 @@ const AddPost = () => {
               {(k === 'dateTime' && (
                 <input
                   type="datetime-local"
-                  name="shoeModel"
                   onChange={(e) => {
                     updateFormData(k, e.target.value);
                   }}
                 />
               )) ||
-                (k === 'app' && (
+                (k === 'dropType' && (
                   <div className="app-select">
                     <input
                       type="radio"
-                      name="shoeModel"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -238,7 +250,6 @@ const AddPost = () => {
                     <br />
                     <input
                       type="radio"
-                      name="shoeModel"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -249,7 +260,6 @@ const AddPost = () => {
                     <br />
                     <input
                       type="radio"
-                      name="shoeModel"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -260,10 +270,43 @@ const AddPost = () => {
                     <br />
                   </div>
                 )) ||
-                (k === 'images' && <></>) || (
+                (k === 'images' && <></>) ||
+                (k === 'app' && (
+                  <div className="app-select">
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        updateFormData(k, e.target.value);
+                      }}
+                      value="adidas CONFIRMED"
+                      id="adidas CONFIRMED"
+                    />
+                    <label htmlFor="adidas CONFIRMED">adidas CONFIRMED</label>
+                    <br />
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        updateFormData(k, e.target.value);
+                      }}
+                      value="Nike SNKRS"
+                      id="Nike SNKRS"
+                    />
+                    <label htmlFor="Nike SNKRS">Nike SNKRS</label>
+                    <br />
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        updateFormData(k, e.target.value);
+                      }}
+                      value="Nike"
+                      id="Nike"
+                    />
+                    <label htmlFor="Nike">Nike</label>
+                    <br />
+                  </div>
+                )) || (
                   <input
                     type="text"
-                    name="shoeModel"
                     onChange={(e) => {
                       updateFormData(k, e.target.value);
                     }}
@@ -272,16 +315,15 @@ const AddPost = () => {
             </div>
           );
         })}
-
         <div className="dnd">
           <div {...getRootProps({ className: 'dnd-zone' })}>
             <input {...getInputProps()} />
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
-          <ThumbsContainer>{thumbs}</ThumbsContainer>
-        </div>
 
-        <button disabled={true} onClick={submitForm}>
+          {/* <ThumbsContainer>{thumbs}</ThumbsContainer> */}
+        </div>
+        <button disabled={false} onClick={submitForm}>
           Confirm
         </button>
       </form>

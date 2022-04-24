@@ -1,4 +1,6 @@
 import express from 'express';
+import fs from 'fs';
+
 import { config } from '../config/config.js';
 import { generateImage } from '../handlers/generateImage.js';
 import { getImageData, saveImage } from '../handlers/saveImage.js';
@@ -8,7 +10,7 @@ import { PostSchema, PostModel } from '../models/Post.model.js';
 import { loggedUsers } from './Auth.route.js';
 
 router.post('/', async (req, res) => {
-  console.log(req.body);
+  console.log(req.body.files);
 
   try {
     if (loggedUsers.find((user: any) => user.token === req.body.token)) {
