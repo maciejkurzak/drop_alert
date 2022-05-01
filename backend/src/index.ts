@@ -60,6 +60,9 @@ app.use('/api/post/', postRoute);
 import { addPostRoute } from './routes/AddPost.route.js';
 app.use('/api/add-post', addPostRoute);
 
+import { SendImageRoute } from './routes/SendImage.route.js';
+app.use('/api/send-image', SendImageRoute);
+
 // ===================================================
 
 // GENERATING AND SAVING IMAGES

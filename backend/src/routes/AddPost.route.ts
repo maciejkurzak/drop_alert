@@ -10,7 +10,7 @@ import { PostSchema, PostModel } from '../models/Post.model.js';
 import { loggedUsers } from './Auth.route.js';
 
 router.post('/', async (req, res) => {
-  console.log(req.body.files);
+  console.log(req.body);
 
   try {
     if (loggedUsers.find((user: any) => user.token === req.body.token)) {

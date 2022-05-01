@@ -134,7 +134,7 @@ const AddPost = () => {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
   const [formData, setFormData] = useState({});
-  const [files, setFiles]: [any, any] = useState(new FormData());
+  const [files, setFiles]: [any, any] = useState([]);
 
   const maxSize = 5242880;
 
@@ -145,21 +145,43 @@ const AddPost = () => {
   const submitForm = (e: any) => {
     e.preventDefault();
 
-    console.log(files);
+    // axios
+    //   .post('http://localhost:5100/api/add-post', { token, formData })
+    //   .then((res) => {
+    //     if (!res.data.isTokenValid) {
+    //       setToken('');
+    //       window.location.reload();
+    //     }
+    //     if (res.data.status === 'success') {
+    //       redirectToCreatedPost();
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     // console.log(err);
+    //   });
 
-    axios
-      .post('http://localhost:5100/api/add-post', { token, formData, files })
+    let imagesForm = new FormData();
+
+    if (files.length !== 0) {
+      for (const singleFile of files) {
+        imagesForm.append('images', singleFile);
+      }
+    }
+
+    console.log([...(imagesForm.entries() as any)]);
+
+    console.log(files[0]);
+
+    fetch('http://localhost:5100/api/send-image', {
+      mode: 'no-cors',
+      method: 'POST',
+      body: imagesForm,
+    })
       .then((res) => {
-        if (!res.data.isTokenValid) {
-          setToken('');
-          window.location.reload();
-        }
-        if (res.data.status === 'success') {
-          redirectToCreatedPost();
-        }
+        console.log({ res: res });
       })
       .catch((err) => {
-        // console.log(err);
+        console.log({ error: err });
       });
   };
 
@@ -181,21 +203,15 @@ const AddPost = () => {
       };
       reader.readAsArrayBuffer(file);
 
-      console.log(JSON.stringify(file));
+      console.log(file);
       // setFiles(...files, file);
 
       setFiles(
-        acceptedFiles.map((file: any) => {
-          // Update the formData object
-          files.append(
-            'file', // property co akceptuje backend
-            file, // blob
-            file.name // nazwa pliku
-          );
-          return Object.assign(file, {
+        acceptedFiles.map((file: any) =>
+          Object.assign(file, {
             preview: URL.createObjectURL(file),
-          });
-        })
+          })
+        )
       );
     });
   }, []);
@@ -207,18 +223,19 @@ const AddPost = () => {
     onDrop,
   });
 
-  // const thumbs = files.map((file: any) => (
-  //   <Thumb key={file.name}>
-  //     <ThumbInner>
-  //       <Img src={file.preview} alt="" />
-  //     </ThumbInner>
-  //   </Thumb>
-  // ));
+  const thumbs = files.map((file: any) => (
+    <Thumb key={file.name}>
+      <ThumbInner>
+        <Img src={file.preview} alt="" />
+      </ThumbInner>
+    </Thumb>
+  ));
 
-  // useEffect(() => {
-  //   // Make sure to revoke the data uris to avoid memory leaks
-  //   files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  // }, [files]);
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () =>
+      files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+  }, [files]);
 
   return (
     <StyledAddPost>
@@ -321,7 +338,7 @@ const AddPost = () => {
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
 
-          {/* <ThumbsContainer>{thumbs}</ThumbsContainer> */}
+          <ThumbsContainer>{thumbs}</ThumbsContainer>
         </div>
         <button disabled={false} onClick={submitForm}>
           Confirm
