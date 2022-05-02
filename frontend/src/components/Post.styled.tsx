@@ -116,11 +116,11 @@ const Post = (abc: any) => {
               <div key={k} className="data-el">
                 <h3>{columns[k]}</h3>
                 <div className="images">
-                  {images.map((el: any) => {
+                  {images.map((el: any, index: number) => {
                     return (
                       <img
-                        key={el.data}
-                        src={`data:image/png;base64,${toBase64(el.data)}`}
+                        key={el}
+                        src={`http://localhost:5100/public/output/${el}`}
                         alt="alt"
                       ></img>
                     );

@@ -4,6 +4,8 @@ import express from 'express';
 const router = express.Router();
 const app: express.Application = express();
 
+import { fileURLToPath } from 'url';
+
 import cors from 'cors';
 import bodyParser from 'body-parser';
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,6 +49,11 @@ registerFont(path.resolve('./src/assets/fonts/Rubik/Rubik-VariableFont_wght.ttf'
 app.get('/', (req, res) => {
   res.send('TypeScript With Expresss');
 });
+
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
+
+app.use('/public/output', express.static(path.join(__dirname, '../public/output')));
 
 import { authRoute } from './routes/Auth.route.js';
 app.use('/api/auth', authRoute);

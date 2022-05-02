@@ -15,7 +15,7 @@ export const generateImage = async (data: any, imagePath: string, number: number
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   // adding shoes image
-  const background = await Canvas.loadImage(process.cwd() + imagePath);
+  const background = await Canvas.loadImage(imagePath);
   const aspectRatio = background.naturalWidth / background.naturalHeight;
 
   console.log(number);

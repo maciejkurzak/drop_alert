@@ -36,7 +36,7 @@ const PostSchema = new Schema<databasePostProps>({
   },
   images: [
     {
-      type: Buffer,
+      type: String,
       required: true,
     },
   ],
