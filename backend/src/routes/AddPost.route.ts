@@ -22,14 +22,14 @@ router.post('/', async (req, res) => {
     }
     // const images = [];
 
-    // for (let i = 0; i < config.imagesNumber; i++) {
+    // for (let i = 0; i < config.imagesCount; i++) {
     //   const image = await generateImage(config, i + 1);
     //   const imageData = getImageData(image, i + 1);
     //   images.push(imageData);
     // }
 
     // const post = new PostModel({
-    //   imagesNumber: req.body.imagesNumber,
+    //   imagesCount: req.body.imagesCount,
     //   shoeModel: req.body.shoeModel,
     //   shoeColor: req.body.shoeColor,
     //   retailPrice: req.body.retailPrice,

@@ -1,12 +1,12 @@
 export const dropApps: string[] = ['adidas CONFIRMED', 'Nike SNKRS', 'Nike'];
 
 export interface configProps {
-  imagesNumber: number;
+  imagesCount: number;
   shoeModel: string;
   shoeColor: string;
   retailPrice: string;
   resellPrice?: string;
-  dateTime: dateTimeProps;
+  dateTime: string;
   dropType: 'LEO' | 'DAN' | null;
   app: 'adidas CONFIRMED' | 'Nike SNKRS' | 'Nike';
 }
@@ -29,10 +29,3 @@ export const months: string[] = [
   'listopada',
   'grudnia',
 ];
-
-interface dateTimeProps {
-  day: number;
-  month: number;
-  year: number;
-  time: string;
-}

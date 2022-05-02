@@ -5,7 +5,7 @@ const { registerFont, createCanvas } = canvasPkg;
 
 import { months } from '../config/configProps.js';
 
-export const generateImage = async (config: any, number: number) => {
+export const generateImage = async (data: any, imagePath: string, number: number) => {
   // creating canva
   const canvas = Canvas.createCanvas(1080, 1080);
   const context = canvas.getContext('2d');
@@ -15,14 +15,16 @@ export const generateImage = async (config: any, number: number) => {
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   // adding shoes image
-  const background = await Canvas.loadImage(process.cwd() + `/src/assets/img/${number}.png`);
+  const background = await Canvas.loadImage(process.cwd() + imagePath);
   const aspectRatio = background.naturalWidth / background.naturalHeight;
+
+  console.log(number);
 
   if (number == 1) {
     context.drawImage(
       background,
       (canvas.height - canvas.height * aspectRatio) / 2, // y
-      0 - (canvas.height / 100) * 15, // x
+      0, // x
       canvas.width * aspectRatio, // w
       canvas.height // h
     );
@@ -67,45 +69,45 @@ export const generateImage = async (config: any, number: number) => {
     context.font = '58px Rubik SemiBold';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
-    context.fillText(kernedText(`${config.retailPrice} PLN`), 30, canvas.height - 70);
+    context.fillText(kernedText(`${data.retailPrice} PLN`), 30, canvas.height - 70);
 
     // resell price
     context.font = '58px Rubik SemiBold';
     context.fillStyle = '#000000';
     context.textAlign = 'right';
-    context.fillText(kernedText(`${config.resellPrice} PLN`), canvas.width - 30, canvas.height - 70);
+    context.fillText(kernedText(`${data.resellPrice} PLN`), canvas.width - 30, canvas.height - 70);
 
     // model name
     context.font = '72px Rubik SemiBold';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
-    context.fillText(kernedText(config.shoeModel), 30, canvas.height - 270);
+    context.fillText(kernedText(data.shoeModel), 30, canvas.height - 270);
 
     // shoe color
     context.font = '48px Rubik Light';
     context.fillStyle = '#00000080';
     context.textAlign = 'left';
-    context.fillText(kernedText(config.shoeColor), 30, canvas.height - 210);
+    context.fillText(kernedText(data.shoeColor), 30, canvas.height - 210);
 
     // ADDING DROP DATE ANT TYPE
 
-    const day = config.dateTime.day.toString();
-    const month = months[config.dateTime.month - 1];
-    const year = config.dateTime.year.toString();
+    // const day = data.dateTime.day.toString();
+    // const month = months[data.dateTime.month - 1];
+    // const year = data.dateTime.year.toString();
 
     context.font = '40px Rubik Medium';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
 
-    context.fillText(kernedText(`${day} ${month} ${year}`), 150, 70);
+    // context.fillText(kernedText(`${day} ${month} ${year}`), 150, 70);
 
     context.font = '32px Rubik Light';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
 
-    const hour = config.dateTime.time;
+    // const hour = data.dateTime.time;
 
-    context.fillText(kernedText(`${hour} ${config.dropType ? '(' + config.dropType + ')' : ''}`), 150, 120);
+    // context.fillText(kernedText(`${hour} ${data.dropType ? '(' + data.dropType + ')' : ''}`), 150, 120);
   }
 
   // canvas clipping function
@@ -133,7 +135,7 @@ export const generateImage = async (config: any, number: number) => {
   context.font = '24px Rubik';
   context.fillStyle = '#00000080';
   context.textAlign = 'left';
-  context.fillText(kernedText('/' + config.imagesNumber.toString()), 835, 58);
+  context.fillText(kernedText('/' + data.imagesCount.toString()), 835, 58);
 
   // clipping canva
   context.beginPath();
@@ -144,7 +146,7 @@ export const generateImage = async (config: any, number: number) => {
 
   if (number == 1) {
     // app logo
-    const appLogo = await Canvas.loadImage(process.cwd() + `/src/assets/img/apps_icons/${config.app}.png`);
+    const appLogo = await Canvas.loadImage(process.cwd() + `/src/assets/img/apps_icons/${data.app}.png`);
     context.drawImage(
       appLogo,
       30, // y
@@ -160,24 +162,13 @@ export const generateImage = async (config: any, number: number) => {
 
   // clipping canva
   context.beginPath();
-  canvasRadius(
-    canvas.width - 30 - 240 + (240 / config.imagesNumber) * (number - 1),
-    70,
-    240 / config.imagesNumber,
-    10,
-    6
-  );
+  canvasRadius(canvas.width - 30 - 240 + (240 / data.imagesCount) * (number - 1), 70, 240 / data.imagesCount, 10, 6);
   context.closePath();
   context.clip();
 
   // image counter bar value
   context.fillStyle = '#000000';
-  context.fillRect(
-    canvas.width - 30 - 240 + (240 / config.imagesNumber) * (number - 1),
-    70,
-    240 / config.imagesNumber,
-    10
-  );
+  context.fillRect(canvas.width - 30 - 240 + (240 / data.imagesCount) * (number - 1), 70, 240 / data.imagesCount, 10);
 
   return canvas;
 };

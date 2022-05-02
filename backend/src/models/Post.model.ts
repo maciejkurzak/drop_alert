@@ -23,12 +23,7 @@ const PostSchema = new Schema<databasePostProps>({
     min: 1,
   },
   dateTime: {
-    type: {
-      day: Number,
-      month: Number,
-      year: Number,
-      time: String,
-    },
+    type: String,
     required: true,
   },
   dropType: {

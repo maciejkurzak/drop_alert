@@ -130,10 +130,11 @@ const columns: any = {
   images: 'Images',
 };
 
+let form = new FormData();
 const AddPost = () => {
   const navigate = useNavigate();
-  const { token, setToken } = useToken();
-  const [formData, setFormData] = useState({});
+  // const { token, setToken } = useToken();
+  // const [formData, setFormData] = useState({});
   const [files, setFiles]: [any, any] = useState([]);
 
   const maxSize = 5242880;
@@ -160,35 +161,33 @@ const AddPost = () => {
     //     // console.log(err);
     //   });
 
-    let imagesForm = new FormData();
-
     if (files.length !== 0) {
       for (const singleFile of files) {
-        imagesForm.append('images', singleFile);
+        form.append('images', singleFile);
       }
+      form.append('imagesCount', files.length);
     }
-
-    console.log([...(imagesForm.entries() as any)]);
-
-    console.log(files[0]);
 
     fetch('http://localhost:5100/api/send-image', {
       mode: 'no-cors',
       method: 'POST',
-      body: imagesForm,
+      body: form,
     })
       .then((res) => {
         console.log({ res: res });
+        setTimeout(() => {
+          redirectToCreatedPost();
+        }, 1000);
       })
       .catch((err) => {
         console.log({ error: err });
       });
+
+    console.log(form);
   };
 
   const updateFormData = (name: any, data: any) => {
-    const abc: any = formData;
-    abc[name] = data;
-    setFormData(abc);
+    form.set(name, data);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -202,9 +201,6 @@ const AddPost = () => {
         const binaryStr = reader.result;
       };
       reader.readAsArrayBuffer(file);
-
-      console.log(file);
-      // setFiles(...files, file);
 
       setFiles(
         acceptedFiles.map((file: any) =>
@@ -257,6 +253,7 @@ const AddPost = () => {
                   <div className="app-select">
                     <input
                       type="radio"
+                      name="drop-type"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -267,6 +264,7 @@ const AddPost = () => {
                     <br />
                     <input
                       type="radio"
+                      name="drop-type"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -277,6 +275,7 @@ const AddPost = () => {
                     <br />
                     <input
                       type="radio"
+                      name="drop-type"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -292,6 +291,7 @@ const AddPost = () => {
                   <div className="app-select">
                     <input
                       type="radio"
+                      name="app"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -302,6 +302,7 @@ const AddPost = () => {
                     <br />
                     <input
                       type="radio"
+                      name="app"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);
                       }}
@@ -311,6 +312,7 @@ const AddPost = () => {
                     <label htmlFor="Nike SNKRS">Nike SNKRS</label>
                     <br />
                     <input
+                      name="app"
                       type="radio"
                       onChange={(e) => {
                         updateFormData(k, e.target.value);

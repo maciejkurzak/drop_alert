@@ -2,7 +2,7 @@ POST http://localhost:5100/api/add-post
 content-type: application/json
 
 {
-  "imagesNumber": 3,
+  "imagesCount": 3,
   "shoeModel": "SB Dunk High Pro",
   "shoeColor": "Mineral Slate Suede",
   "retailPrice": "549",
