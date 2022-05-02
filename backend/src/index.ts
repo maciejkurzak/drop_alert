@@ -67,8 +67,8 @@ app.use('/api/send-image', SendImageRoute);
 
 // GENERATING AND SAVING IMAGES
 
-// for (let i = 0; i < config.imagesNumber; i++) {
-//   const image = await generateImage(config, i + 1);
+// for (let i = 0; i < 3; i++) {
+//   const image = await generateImage(config, `/src/assets/img/${i + 1}.png`, i);
 //   saveImage(image, i + 1);
 // }
 

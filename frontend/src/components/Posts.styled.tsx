@@ -127,8 +127,8 @@ const Posts = () => {
                     return (
                       <td key={k}>
                         <a href={`/posts/${posts[j]['_id']}`}>
-                          {posts[j][k]['day']}.{posts[j][k]['month']}.
-                          {posts[j][k]['year']} {posts[j][k]['time']}
+                          {/* {posts[j][k]['day']}.{posts[j][k]['month']}.
+                          {posts[j][k]['year']} {posts[j][k]['time']} */}
                         </a>
                       </td>
                     );
