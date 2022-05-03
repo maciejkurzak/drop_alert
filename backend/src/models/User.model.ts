@@ -16,12 +16,14 @@ const UserSchema = new Schema<User>({
     unique: true,
     lowercase: true,
     required: true,
+    trim: true,
   },
   username: {
     type: String,
     unique: true,
     min: 6,
     max: 15,
+    trim: true,
   },
   password: {
     type: String,

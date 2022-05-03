@@ -168,7 +168,7 @@ const AddPost = () => {
       form.append('imagesCount', files.length);
     }
 
-    fetch('http://localhost:5100/api/send-image', {
+    fetch('http://localhost:5100/api/add-post', {
       mode: 'no-cors',
       method: 'POST',
       body: form,

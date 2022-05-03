@@ -67,18 +67,6 @@ app.use('/api/post/', postRoute);
 import { addPostRoute } from './routes/AddPost.route.js';
 app.use('/api/add-post', addPostRoute);
 
-import { SendImageRoute } from './routes/SendImage.route.js';
-app.use('/api/send-image', SendImageRoute);
-
-// ===================================================
-
-// GENERATING AND SAVING IMAGES
-
-// for (let i = 0; i < 3; i++) {
-//   const image = await generateImage(config, `/src/assets/img/${i + 1}.png`, i);
-//   saveImage(image, i + 1);
-// }
-
 // ===================================================
 
 // SERVING EXPRESS BACKEND

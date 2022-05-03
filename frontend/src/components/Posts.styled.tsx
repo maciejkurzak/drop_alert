@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
 
@@ -92,19 +92,10 @@ const Posts = () => {
   const columns: any = {
     shoeModel: 'Shoe model',
     shoeColor: 'Shoe color',
-    retailPrice: 'Retail price',
-    resellPrice: 'Resell price',
     dateTime: 'Date time',
     dropType: 'Drop type',
     app: 'App',
   };
-
-  function toBase64(arr: any) {
-    //arr = new Uint8Array(arr) if it's an ArrayBuffer
-    return btoa(
-      arr.reduce((data: any, byte: any) => data + String.fromCharCode(byte), '')
-    );
-  }
 
   return posts ? (
     <StyledPosts>
@@ -122,34 +113,38 @@ const Posts = () => {
           {Object.keys(posts).map((j: any) => {
             return (
               <tr key={j}>
-                {Object.keys(columns).map((k: any) => {
-                  if (k === 'dateTime') {
-                    return (
-                      <td key={k}>
+                {Object.keys(columns).map((k: any) => (
+                  <React.Fragment key={k}>
+                    {k === 'shoeModel' && (
+                      <td>
+                        <a href={`/posts/${posts[j]['_id']}`}>{posts[j][k]}</a>
+                      </td>
+                    )}
+                    {k === 'shoeColor' && (
+                      <td>
+                        <a href={`/posts/${posts[j]['_id']}`}>{posts[j][k]}</a>
+                      </td>
+                    )}
+                    {k === 'dateTime' && (
+                      <td>
                         <a href={`/posts/${posts[j]['_id']}`}>
                           {/* {posts[j][k]['day']}.{posts[j][k]['month']}.
-                          {posts[j][k]['year']} {posts[j][k]['time']} */}
+                        {posts[j][k]['year']} {posts[j][k]['time']} */}
                         </a>
                       </td>
-                    );
-                  } else if (k === 'images') {
-                    return (
-                      <td key={k}>
-                        <img
-                          src={`data:image/png;base64,${toBase64(
-                            JSON.parse(JSON.stringify(posts[j][k][0])).data
-                          )}`}
-                          alt="alt"
-                        ></img>
+                    )}
+                    {k === 'dropType' && (
+                      <td>
+                        <a href={`/posts/${posts[j]['_id']}`}>{posts[j][k]}</a>
                       </td>
-                    );
-                  }
-                  return (
-                    <td key={k}>
-                      <a href={`/posts/${posts[j]['_id']}`}>{posts[j][k]}</a>
-                    </td>
-                  );
-                })}
+                    )}
+                    {k === 'app' && (
+                      <td>
+                        <a href={`/posts/${posts[j]['_id']}`}>{posts[j][k]}</a>
+                      </td>
+                    )}
+                  </React.Fragment>
+                ))}
               </tr>
             );
           })}
