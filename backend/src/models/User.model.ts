@@ -1,8 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, PassportLocalDocument, PassportLocalModel, PassportLocalSchema } from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
 
 const { Schema, model, connect } = mongoose;
 
-interface User {
+interface User extends PassportLocalDocument {
   email: string;
   username: string;
   password: string;
@@ -10,40 +11,43 @@ interface User {
   date: any;
 }
 
-const UserSchema = new Schema<User>({
-  email: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    required: true,
-    trim: true,
+const UserSchema = new Schema<User>(
+  {
+    email: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      required: true,
+      trim: true,
+    },
+    username: {
+      type: String,
+      unique: true,
+      min: 6,
+      max: 15,
+      trim: true,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      required: true,
+      default: 'user',
+    },
+    date: {
+      type: Date,
+      default: Date.now(),
+    },
+    // orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]
   },
-  username: {
-    type: String,
-    unique: true,
-    min: 6,
-    max: 15,
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    min: 6,
-    max: 1024,
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    required: true,
-    default: 'user',
-  },
-  date: {
-    type: Date,
-    default: Date.now(),
-  },
-  // orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]
-});
+  {
+    timestamps: true,
+  }
+) as PassportLocalSchema;
 
-const UserModel = model<User>('User', UserSchema);
+interface UserModel<T extends Document> extends PassportLocalModel<T> {}
+
+UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+
+const UserModel: UserModel<User> = model<User>('User', UserSchema);
 
 export { UserSchema, UserModel };

@@ -1,5 +1,8 @@
 // IMPORTS
 
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
+
 import express from 'express';
 const router = express.Router();
 const app: express.Application = express();
@@ -34,6 +37,26 @@ import listeningMessage from './handlers/listeningMessage.js';
 
 // ===================================================
 
+// CONNECTING TO DATABASE
+
+await mongoose
+  .connect('mongodb://localhost:27017/drop_alert')
+  .then(() => {
+    debug('Connection estabislished with MongoDB');
+  })
+  .catch((error) => console.error(error.message));
+
+dbConn();
+
+// ===================================================
+
+// Configure passport
+
+import passport from './config/passport.js';
+passport();
+
+// ===================================================
+
 // CANVAS FONTS
 
 registerFont(path.resolve('./src/assets/fonts/Rubik/Rubik-VariableFont_wght.ttf'), {
@@ -56,7 +79,7 @@ export const __dirname = path.dirname(__filename);
 app.use('/public/output', express.static(path.join(__dirname, '../public/output')));
 
 import { authRoute } from './routes/Auth.route.js';
-app.use('/api/auth', authRoute);
+app.use('/api/auth', authRoute());
 
 import { postsRoute } from './routes/Posts.route.js';
 app.use('/api/posts', postsRoute);
@@ -74,16 +97,3 @@ app.use('/api/add-post', addPostRoute);
 app.listen(port, () => {
   listeningMessage(port);
 });
-
-// ===================================================
-
-// CONNECTING TO DATABASE
-
-await mongoose
-  .connect('mongodb://localhost:27017/drop_alert')
-  .then(() => {
-    debug('Connection estabislished with MongoDB');
-  })
-  .catch((error) => console.error(error.message));
-
-dbConn();
