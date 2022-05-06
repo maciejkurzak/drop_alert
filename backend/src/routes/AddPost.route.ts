@@ -23,9 +23,10 @@ import { generateImage } from '../handlers/generateImage.js';
 import { getImageData, saveImage } from '../handlers/saveImage.js';
 import { PostModel } from '../models/Post.model.js';
 import { error } from '../handlers/chalkFunctions.js';
+import { jwtAuth } from '../middlewares/auth.js';
 const router = express.Router();
 
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', jwtAuth, upload.array('images', 10), async (req, res) => {
   const data: configProps = req.body;
 
   try {

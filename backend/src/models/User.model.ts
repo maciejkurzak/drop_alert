@@ -46,7 +46,7 @@ const UserSchema = new Schema<User>(
 
 interface UserModel<T extends Document> extends PassportLocalModel<T> {}
 
-UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+UserSchema.plugin(passportLocalMongoose, { usernameField: 'username' });
 
 const UserModel: UserModel<User> = model<User>('User', UserSchema);
 

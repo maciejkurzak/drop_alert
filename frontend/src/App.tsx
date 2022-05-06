@@ -25,11 +25,12 @@ const RouterView = styled.div`
 `;
 
 const App = () => {
-  const { token, setToken } = useToken();
+  // const { token, setToken } = useToken();
+  // console.log(token);
 
-  if (!token) {
-    return <Login setToken={setToken} />;
-  }
+  // if (!token) {
+  //   return <Login setToken={setToken} />;
+  // }
 
   return (
     <div className="App">

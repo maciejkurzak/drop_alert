@@ -4,17 +4,11 @@ import { PostModel, PostSchema } from '../models/Post.model.js';
 const router = express.Router();
 
 import { ObjectID } from 'mongodb';
+import { jwtAuth } from '../middlewares/auth.js';
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', jwtAuth, async (req, res) => {
   try {
-    // if (loggedUsers.find((user: any) => user.token === req.body.token)) {
-    //   // console.log('User is logged in');
-    //   return res.send({ isTokenValid: true, posts: await PostModel.findOne({ _id: req.params.id }) });
-    //   console.log('Request Id:', req.params);
-    // } else {
-    //   // console.log('User is not logged in');
-    //   return res.send({ isTokenValid: false });
-    // }
+    return res.send({ isTokenValid: true, posts: await PostModel.findOne({ _id: req.params.id }) });
   } catch (err: any) {
     console.error(err.message);
   }

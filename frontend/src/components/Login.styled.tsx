@@ -24,7 +24,7 @@ const loginUser = async (credentials: any) => {
 };
 
 const Login: React.FC<LoginProps> = ({ setToken }) => {
-  const [username, setUserName]: any[] = useState();
+  const [username, setUsername]: any[] = useState();
   const [password, setPassword]: any[] = useState();
 
   const updateLoggedUser = useStore((store) => store.updateLoggedUser);
@@ -35,15 +35,12 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
       username,
       password,
     });
-    const token = loginResponse.token;
 
-    const loggedUser = loginResponse.loggedUser;
+    console.log(loginResponse);
 
-    updateLoggedUser({ loggedUser });
+    updateLoggedUser({ loginResponse });
 
-    setToken({ token });
-
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
@@ -52,7 +49,7 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username</p>
-          <input type="text" onChange={(e) => setUserName(e.target.value)} />
+          <input type="text" onChange={(e) => setUsername(e.target.value)} />
         </label>
         <label>
           <p>Password</p>
@@ -74,6 +71,3 @@ Login.propTypes = {
 };
 
 export default Login;
-function updateLoggedUser(arg0: { loggedUser: any }) {
-  throw new Error('Function not implemented.');
-}

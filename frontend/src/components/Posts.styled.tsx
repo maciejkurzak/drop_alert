@@ -72,21 +72,25 @@ const Posts = () => {
   const { token, setToken } = useToken();
   const [posts, setPosts] = useState();
 
+  console.log(token);
+
   useEffect(() => {
-    axios
-      .post('http://localhost:5100/api/posts', { token })
-      .then((res) => {
-        // console.log(res);
-        if (!res.data.isTokenValid) {
-          setToken('');
-          window.location.reload();
-        }
-        setPosts(res.data.posts);
-        // console.log(res.data.posts);
+    async function run() {
+      fetch('http://localhost:5100/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzI0NGZjZmYzNGQ5MGNhMzFiMjZkNCIsImlhdCI6MTY1MTg2NDMzMiwiZXhwIjoxNjUxODY1NTMyfQ.7JScMkKwKNd0APp_B2pHuarG5ltckmViixqM5pwOxw8`,
+        },
       })
-      .catch((err) => {
-        // console.log(err);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          setPosts(res.posts);
+        });
+    }
+    run();
   }, [token]);
 
   const columns: any = {

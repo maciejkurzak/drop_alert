@@ -41,9 +41,7 @@ const StyledLoggedUser = styled.div`
 `;
 
 const LoggedUser = () => {
-  const loggedUser = JSON.parse(
-    useStore((state) => state.loggedUser)
-  ).loggedUser;
+  const loggedUser = JSON.parse(useStore((state) => state.loggedUser)).user;
 
   return (
     <StyledLoggedUser className="logged-user">
