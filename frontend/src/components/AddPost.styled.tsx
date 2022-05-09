@@ -1,9 +1,17 @@
-import axios from 'axios';
-import { useState, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
+
+import SweetAlert from 'sweetalert-react';
+import 'sweetalert/dist/sweetalert.css';
 
 const StyledAddPost = styled.div`
   form {
@@ -137,7 +145,7 @@ const AddPost = () => {
   // const [formData, setFormData] = useState({});
   const [files, setFiles]: [any, any] = useState([]);
 
-  const maxSize = 5242880;
+  const maxSize = 1048576 * 10;
 
   const redirectToCreatedPost = () => {
     navigate('/posts');
@@ -154,7 +162,6 @@ const AddPost = () => {
     }
 
     fetch('http://localhost:5100/api/add-post', {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -166,15 +173,25 @@ const AddPost = () => {
           setToken('');
           window.location.reload();
         }
-        setTimeout(() => {
-          redirectToCreatedPost();
-        }, 1000);
+        if (res.ok) {
+          setTimeout(() => {
+            redirectToCreatedPost();
+          }, 1000);
+        }
+        return res.json();
+      })
+      .then((res) => {
+        if (!res.ok) {
+          if (res.error) {
+            setError({ show: true, message: res.error });
+          } else {
+            setError({ show: true, message: 'Unknown error' });
+          }
+        }
       })
       .catch((err) => {
         console.log({ error: err });
       });
-
-    console.log(form);
   };
 
   const updateFormData = (name: any, data: any) => {
@@ -224,8 +241,23 @@ const AddPost = () => {
       files.forEach((file: any) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
+  interface errorProps {
+    show?: boolean;
+    message?: string;
+  }
+
+  const [error, setError]: [errorProps, Dispatch<SetStateAction<errorProps>>] =
+    useState({});
+
   return (
     <StyledAddPost>
+      <SweetAlert
+        show={error.show}
+        title="Error"
+        text={error.message}
+        type="error"
+        onConfirm={() => setError({ show: false, message: '' })}
+      />
       <h1>Add Post</h1>
       <form>
         {Object.keys(columns).map((k: any) => {
