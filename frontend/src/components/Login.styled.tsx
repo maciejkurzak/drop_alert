@@ -20,7 +20,10 @@ const loginUser = async (credentials: any) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  }).then((res: any) => {
+    if (!res.ok) console.log(res.status + ' ' + res.statusText);
+    else return res.json();
+  });
 };
 
 const Login: React.FC<LoginProps> = ({ setToken }) => {
@@ -31,16 +34,20 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const loginResponse = await loginUser({
-      username,
-      password,
-    });
 
-    console.log(loginResponse);
+    if (username && password) {
+      const loginResponse = await loginUser({
+        username,
+        password,
+      });
+      if (loginResponse) {
+        updateLoggedUser(loginResponse);
+      }
+    } else {
+      console.log('Please fill in all fields');
+    }
 
-    updateLoggedUser({ loginResponse });
-
-    // window.location.reload();
+    window.location.reload();
   };
 
   return (

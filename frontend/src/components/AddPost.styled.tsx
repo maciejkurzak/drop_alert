@@ -133,7 +133,7 @@ const columns: any = {
 let form = new FormData();
 const AddPost = () => {
   const navigate = useNavigate();
-  // const { token, setToken } = useToken();
+  const { token, setToken } = useToken();
   // const [formData, setFormData] = useState({});
   const [files, setFiles]: [any, any] = useState([]);
 
@@ -146,21 +146,6 @@ const AddPost = () => {
   const submitForm = (e: any) => {
     e.preventDefault();
 
-    // axios
-    //   .post('http://localhost:5100/api/add-post', { token, formData })
-    //   .then((res) => {
-    //     if (!res.data.isTokenValid) {
-    //       setToken('');
-    //       window.location.reload();
-    //     }
-    //     if (res.data.status === 'success') {
-    //       redirectToCreatedPost();
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     // console.log(err);
-    //   });
-
     if (files.length !== 0) {
       for (const singleFile of files) {
         form.append('images', singleFile);
@@ -171,10 +156,16 @@ const AddPost = () => {
     fetch('http://localhost:5100/api/add-post', {
       mode: 'no-cors',
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: form,
     })
       .then((res) => {
-        console.log({ res: res });
+        if ([401, 403].includes(res.status)) {
+          setToken('');
+          window.location.reload();
+        }
         setTimeout(() => {
           redirectToCreatedPost();
         }, 1000);

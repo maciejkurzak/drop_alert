@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
+import { useStore } from '../store/userData';
 import LoggedUser from './LoggedUser.styled';
 
 const StyledSideBar = styled.div`
@@ -77,10 +78,10 @@ const StyledSideBar = styled.div`
 `;
 
 const SideBar = () => {
-  const { token, setToken } = useToken();
+  const updateLoggedUser = useStore((store) => store.updateLoggedUser);
 
   const logOut = () => {
-    setToken('');
+    updateLoggedUser(false);
     window.location.reload();
   };
 

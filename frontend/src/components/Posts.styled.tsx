@@ -72,18 +72,20 @@ const Posts = () => {
   const { token, setToken } = useToken();
   const [posts, setPosts] = useState();
 
-  console.log(token);
-
   useEffect(() => {
     async function run() {
       fetch('http://localhost:5100/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzI0NGZjZmYzNGQ5MGNhMzFiMjZkNCIsImlhdCI6MTY1MTg2NDMzMiwiZXhwIjoxNjUxODY1NTMyfQ.7JScMkKwKNd0APp_B2pHuarG5ltckmViixqM5pwOxw8`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => {
+          if ([401, 403].includes(res.status)) {
+            setToken('');
+            window.location.reload();
+          }
           return res.json();
         })
         .then((res) => {

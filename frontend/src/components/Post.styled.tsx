@@ -37,44 +37,38 @@ const Post = (abc: any) => {
   const [post, setPost] = useState() as [any, any];
   const [images, setImages]: [any, any] = useState([]);
 
-  const firstRender = useRef(0);
-
   const { postId } = useParams();
 
-  // console.log(postId);
-
   useEffect(() => {
-    axios
-      .post(`http://localhost:5100/api/post/${postId}`, { token })
+    fetch(`http://localhost:5100/api/post/${postId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
-        // console.log(res);
-        if (!res.data.isTokenValid) {
+        if ([401, 403].includes(res.status)) {
           setToken('');
           window.location.reload();
         }
-        setPost(res.data.posts);
-        // console.log(res.data.posts);
+        return res.json();
+      })
+      .then((res) => {
+        setPost(res.post);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
-  }, [token]);
+  }, [postId, token]);
 
   useEffect(() => {
-    if (firstRender.current <= 2) {
-      firstRender.current++;
-      if (post) {
-        setImages([]);
-        post['images'].forEach((el: any) => {
-          setImages((images: any) => [...images, el]);
-        });
-      }
+    if (post) {
+      setImages([]);
+      post['images'].forEach((el: any) => {
+        setImages((images: any) => [...images, el]);
+      });
     }
-  }, [images, post, setPost]);
-
-  // setInterval(() => {
-  //   console.log(post);
-  // }, 3000);
+  }, [post]);
 
   const columns: any = {
     shoeModel: 'shoe model',
@@ -86,18 +80,6 @@ const Post = (abc: any) => {
     app: 'app',
     images: 'images',
   };
-
-  function toBase64(arr: any) {
-    //arr = new Uint8Array(arr) if it's an ArrayBuffer
-    return btoa(
-      arr.reduce((data: any, byte: any) => data + String.fromCharCode(byte), '')
-    );
-  }
-  // if (post['images'].isArray)
-  //   post['images'].forEach((el: any) => {
-  //     console.log(el);
-  //     images.push(el);
-  //   })
 
   return post ? (
     <StyledPost>

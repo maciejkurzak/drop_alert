@@ -8,7 +8,8 @@ import { jwtAuth } from '../middlewares/auth.js';
 
 router.post('/:id', jwtAuth, async (req, res) => {
   try {
-    return res.send({ isTokenValid: true, posts: await PostModel.findOne({ _id: req.params.id }) });
+    const post = await PostModel.findOne({ _id: req.params.id });
+    return res.send({ post });
   } catch (err: any) {
     console.error(err.message);
   }
