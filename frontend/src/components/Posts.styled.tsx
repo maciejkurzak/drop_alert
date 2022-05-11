@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
 
-import { Loader, Center } from '@mantine/core';
+import { Loader, Center, Space } from '@mantine/core';
 
 const StyledPosts = styled.div`
   width: 100%;
@@ -162,7 +162,7 @@ const Posts = () => {
   ) : (
     <StyledPosts>
       <h1>Posts</h1>
-      <br />
+      <Space h="md" />
       <Center style={{ width: '100%', height: '100%' }}>
         <Loader size="xl" />
       </Center>

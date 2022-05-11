@@ -275,6 +275,7 @@ const AddPost = () => {
         onConfirm={() => setError({ show: false, message: '' })}
       />
       <h1>Add Post</h1>
+      <Space h="md" />
       <form>
         {Object.keys(columns).map((k: any) => {
           if (k === 'images') {
