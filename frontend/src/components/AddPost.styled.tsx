@@ -7,11 +7,26 @@ import {
 } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
 
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
+
+import {
+  TextInput,
+  NumberInput,
+  Checkbox,
+  Button,
+  Group,
+  Box,
+  Space,
+} from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { RadioGroup, Radio } from '@mantine/core';
+import React from 'react';
 
 const StyledAddPost = styled.div`
   form {
@@ -169,6 +184,7 @@ const AddPost = () => {
       body: form,
     })
       .then((res) => {
+        console.log(res);
         if ([401, 403].includes(res.status)) {
           setToken('');
           window.location.reload();
@@ -261,101 +277,123 @@ const AddPost = () => {
       <h1>Add Post</h1>
       <form>
         {Object.keys(columns).map((k: any) => {
-          return (
-            <div key={k} className="form-el">
-              <div className="form-el-name">{columns[k]}</div>
-              {(k === 'dateTime' && (
-                <input
-                  type="datetime-local"
+          if (k === 'images') {
+            return (
+              <div key={k} className="form-el">
+                <div className="form-el-name">{columns[k]}</div>{' '}
+              </div>
+            );
+          } else if (k === 'dateTime') {
+            return (
+              <React.Fragment key={k}>
+                <DatePicker
+                  placeholder="Pick date"
+                  label="Post date and time"
+                  required
+                  minDate={dayjs(new Date()).toDate()}
+                  maxDate={dayjs(new Date())
+                    .endOf('month')
+                    .subtract(5, 'days')
+                    .toDate()}
+                  onChange={(e) => {
+                    updateFormData(k, e);
+                  }}
+                />
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'app') {
+            return (
+              <React.Fragment key={k}>
+                <RadioGroup
+                  key={k}
+                  orientation="vertical"
+                  label="App"
+                  required
+                  onChange={(e) => {
+                    updateFormData(k, e);
+                  }}
+                >
+                  <Radio
+                    value="adidas CONFIRMED"
+                    label="adidas CONFIRMED"
+                    required
+                  />
+                  <Radio value="Nike SNKRS" label="Nike SNKRS" required />
+                  <Radio value="Nike" label="Nike" required />
+                </RadioGroup>
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'dropType') {
+            return (
+              <React.Fragment key={k}>
+                <RadioGroup
+                  key={k}
+                  orientation="vertical"
+                  label="Drop type"
+                  required
+                  onChange={(e) => {
+                    updateFormData(k, e);
+                  }}
+                >
+                  <Radio value="LEO" label="LEO" />
+                  <Radio value="DAN" label="DAN" />
+                  <Radio value="none" label="none" />
+                </RadioGroup>
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'resellPrice') {
+            return (
+              <React.Fragment key={k}>
+                <NumberInput
+                  key={k}
+                  required
+                  label={columns[k]}
+                  placeholder=""
+                  hideControls
+                  min={0}
+                  onChange={(e: any) => {
+                    updateFormData(k, e);
+                  }}
+                />
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'retailPrice') {
+            return (
+              <React.Fragment key={k}>
+                <NumberInput
+                  key={k}
+                  required
+                  label={columns[k]}
+                  placeholder=""
+                  hideControls
+                  min={0}
+                  onChange={(e: any) => {
+                    updateFormData(k, e);
+                  }}
+                />
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else {
+            return (
+              <React.Fragment key={k}>
+                <TextInput
+                  key={k}
+                  required
+                  label={columns[k]}
+                  placeholder=""
                   onChange={(e) => {
                     updateFormData(k, e.target.value);
                   }}
                 />
-              )) ||
-                (k === 'dropType' && (
-                  <div className="app-select">
-                    <input
-                      type="radio"
-                      name="drop-type"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="LEO"
-                      id="LEO"
-                    />
-                    <label htmlFor="LEO">LEO</label>
-                    <br />
-                    <input
-                      type="radio"
-                      name="drop-type"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="DAN"
-                      id="DAN"
-                    />
-                    <label htmlFor="DAN">DAN</label>
-                    <br />
-                    <input
-                      type="radio"
-                      name="drop-type"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="none"
-                      id="none"
-                    />
-                    <label htmlFor="none">none</label>
-                    <br />
-                  </div>
-                )) ||
-                (k === 'images' && <></>) ||
-                (k === 'app' && (
-                  <div className="app-select">
-                    <input
-                      type="radio"
-                      name="app"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="adidas CONFIRMED"
-                      id="adidas CONFIRMED"
-                    />
-                    <label htmlFor="adidas CONFIRMED">adidas CONFIRMED</label>
-                    <br />
-                    <input
-                      type="radio"
-                      name="app"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="Nike SNKRS"
-                      id="Nike SNKRS"
-                    />
-                    <label htmlFor="Nike SNKRS">Nike SNKRS</label>
-                    <br />
-                    <input
-                      name="app"
-                      type="radio"
-                      onChange={(e) => {
-                        updateFormData(k, e.target.value);
-                      }}
-                      value="Nike"
-                      id="Nike"
-                    />
-                    <label htmlFor="Nike">Nike</label>
-                    <br />
-                  </div>
-                )) || (
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      updateFormData(k, e.target.value);
-                    }}
-                  />
-                )}
-            </div>
-          );
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          }
         })}
         <div className="dnd">
           <div {...getRootProps({ className: 'dnd-zone' })}>

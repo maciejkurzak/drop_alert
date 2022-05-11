@@ -23,6 +23,7 @@ import { getImageData, saveImage } from '../handlers/saveImage.js';
 import { PostModel } from '../models/Post.model.js';
 import { error } from '../handlers/chalkFunctions.js';
 import { jwtAuth } from '../middlewares/auth.js';
+import { nextTick } from 'process';
 const router = express.Router();
 
 interface multerErrorsProps {
@@ -43,7 +44,7 @@ const multerErrors: multerErrorsProps = {
 router.post(
   '/',
   jwtAuth,
-  function (req, res) {
+  function (req, res, next) {
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
@@ -55,8 +56,9 @@ router.post(
           return res.status(400).json({ error: multerErrors[err.code] });
         }
       } else if (err) {
-        console.log('2', err.code);
+        return res.status(400).json({ error: 'Unknown error' });
       }
+      next();
     });
   },
   async (req: any, res: any) => {

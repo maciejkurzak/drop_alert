@@ -84,6 +84,7 @@ const Post = (abc: any) => {
   return post ? (
     <StyledPost>
       <h1>Post</h1>
+      <button>Delete</button>
       <br />
       <div className="data">
         {Object.keys(columns).map((k: any) => {

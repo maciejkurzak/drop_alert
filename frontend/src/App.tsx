@@ -13,35 +13,63 @@ import Login from './components/Login.styled';
 import useToken from './hooks/useToken';
 import Post from './components/Post.styled';
 
-const RouterView = styled.div`
-  width: 100%;
-  min-height: 100%;
-  margin: 2rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
-`;
+import { MantineProvider, MantineTheme } from '@mantine/core';
+import { createStyles } from '@mantine/core';
+
+const useStyles = createStyles((theme, _params, getRef) => ({
+  routerView: {
+    width: '100%',
+    minHeight: '100%',
+    margin: '2rem',
+    padding: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: '0.5rem',
+    fontFamily: 'Rubik, sans-serif',
+  },
+}));
 
 const App = () => {
   const { token, setToken } = useToken();
 
+  interface classesProps {
+    classes: Record<'routerView', string>;
+    cx: (...args: any) => string;
+    theme: MantineTheme;
+  }
+
+  const { classes }: classesProps = useStyles();
+
   if (!token) {
-    return <Login setToken={setToken} />;
+    return (
+      <MantineProvider
+        theme={{ fontFamily: 'Rubik, sans-serif', colorScheme: 'dark' }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <Login setToken={setToken} />;
+      </MantineProvider>
+    );
   }
 
   return (
     <div className="App">
-      <SideBar />
-      <RouterView>
-        <Routes>
-          <Route path="/" element={<Navigate replace to="/posts" />}></Route>
-          <Route path="/posts/:postId" element={<Post abc={'123'} />} />
-          <Route path="/posts" element={<Posts />}></Route>
-          <Route path="add-post" element={<AddPost />} />
-        </Routes>
-      </RouterView>
+      <MantineProvider
+        theme={{ fontFamily: 'Rubik, sans-serif', colorScheme: 'dark' }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <SideBar />
+        <div className={classes.routerView}>
+          <Routes>
+            <Route path="/" element={<Navigate replace to="/posts" />}></Route>
+            <Route path="/posts/:postId" element={<Post abc={'123'} />} />
+            <Route path="/posts" element={<Posts />}></Route>
+            <Route path="add-post" element={<AddPost />} />
+          </Routes>
+        </div>
+      </MantineProvider>
     </div>
   );
 };
