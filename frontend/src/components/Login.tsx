@@ -80,7 +80,7 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
 
     title: {
       color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-      fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+      fontFamily: `${theme.fontFamily}`,
     },
 
     logo: {
@@ -106,24 +106,25 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
         >
           drop_alert
         </Title>
-
-        <TextInput
-          label="Username"
-          placeholder="Your username"
-          size="md"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {/* <Checkbox label="Keep me logged in" mt="xl" size="md" /> */}
-        <Button fullWidth mt="xl" size="md" onClick={handleSubmit}>
-          Login
-        </Button>
+        <form onSubmit={handleSubmit}>
+          <TextInput
+            label="Username"
+            placeholder="Your username"
+            size="md"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            mt="md"
+            size="md"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {/* <Checkbox label="Keep me logged in" mt="xl" size="md" /> */}
+          <Button fullWidth mt="xl" size="md" type="submit">
+            Login
+          </Button>
+        </form>
       </Paper>
     </div>
   );

@@ -91,7 +91,7 @@ const StyledAddPost = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        max-width: 15rem;
+        max-width: 20rem;
         border: 2px solid #ffffff80;
         background-color: rgba(255, 255, 255, 0.05);
         border-style: dashed;

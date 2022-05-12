@@ -5,15 +5,19 @@ import styled from 'styled-components';
 import './App.css';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
-import SideBar from './components/Sidebar.styled';
-import AddPost from './components/AddPost.styled';
-import Posts from './components/Posts.styled';
-import Login from './components/Login.styled';
+import SideBar from './components/Sidebar/Sidebar';
+import AddPost from './components/AddPost';
+import Posts from './components/Posts';
+import Login from './components/Login';
 
 import useToken from './hooks/useToken';
-import Post from './components/Post.styled';
+import Post from './components/Post';
 
-import { MantineProvider, MantineTheme } from '@mantine/core';
+import {
+  MantineProvider,
+  MantineTheme,
+  MantineThemeOverride,
+} from '@mantine/core';
 import { createStyles } from '@mantine/core';
 
 const useStyles = createStyles((theme, _params, getRef) => ({
@@ -39,15 +43,18 @@ const App = () => {
     theme: MantineTheme;
   }
 
+  const theme: MantineThemeOverride = {
+    fontFamily: 'Rubik, sans-serif',
+    colorScheme: 'dark',
+    spacing: { xs: 10, sm: 15, md: 20, lg: 25, xl: 30 },
+    defaultRadius: 'md',
+  };
+
   const { classes }: classesProps = useStyles();
 
   if (!token) {
     return (
-      <MantineProvider
-        theme={{ fontFamily: 'Rubik, sans-serif', colorScheme: 'dark' }}
-        withGlobalStyles
-        withNormalizeCSS
-      >
+      <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
         <Login setToken={setToken} />
       </MantineProvider>
     );
@@ -55,11 +62,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <MantineProvider
-        theme={{ fontFamily: 'Rubik, sans-serif', colorScheme: 'dark' }}
-        withGlobalStyles
-        withNormalizeCSS
-      >
+      <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
         <SideBar />
         <div className={classes.routerView}>
           <Routes>
