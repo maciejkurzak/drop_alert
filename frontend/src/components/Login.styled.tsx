@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useStore } from '../store/userData';
 
-const StyledLogin = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import {
+  Paper,
+  createStyles,
+  TextInput,
+  PasswordInput,
+  Checkbox,
+  Button,
+  Title,
+  Text,
+  Anchor,
+} from '@mantine/core';
 
 interface LoginProps {
   setToken: any;
@@ -50,26 +56,76 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
     window.location.reload();
   };
 
+  const useStyles = createStyles((theme) => ({
+    wrapper: {
+      minHeight: 900,
+      backgroundSize: 'cover',
+      backgroundImage: 'url(https://i.imgur.com/cj7nh83.jpg)',
+    },
+
+    form: {
+      borderRight: `1px solid ${
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[7]
+          : theme.colors.gray[3]
+      }`,
+      minHeight: 900,
+      maxWidth: 450,
+      paddingTop: 80,
+
+      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+        maxWidth: '100%',
+      },
+    },
+
+    title: {
+      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    },
+
+    logo: {
+      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      width: 120,
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  }));
+
+  const { classes } = useStyles();
+
   return (
-    <StyledLogin className="login-wrapper">
-      <h1>Please Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Username</p>
-          <input type="text" onChange={(e) => setUsername(e.target.value)} />
-        </label>
-        <label>
-          <p>Password</p>
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-    </StyledLogin>
+    <div className={classes.wrapper}>
+      <Paper className={classes.form} radius={0} p={30}>
+        <Title
+          order={2}
+          className={classes.title}
+          align="center"
+          mt="md"
+          mb={50}
+        >
+          drop_alert
+        </Title>
+
+        <TextInput
+          label="Username"
+          placeholder="Your username"
+          size="md"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <PasswordInput
+          label="Password"
+          placeholder="Your password"
+          mt="md"
+          size="md"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {/* <Checkbox label="Keep me logged in" mt="xl" size="md" /> */}
+        <Button fullWidth mt="xl" size="md" onClick={handleSubmit}>
+          Login
+        </Button>
+      </Paper>
+    </div>
   );
 };
 

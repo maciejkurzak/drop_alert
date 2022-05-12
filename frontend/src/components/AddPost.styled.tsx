@@ -17,11 +17,10 @@ import 'sweetalert/dist/sweetalert.css';
 import {
   TextInput,
   NumberInput,
-  Checkbox,
   Button,
-  Group,
-  Box,
   Space,
+  Center,
+  Select,
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -57,7 +56,7 @@ const StyledAddPost = styled.div`
     }
     .form-el > input[type='text'],
     .form-el > input[type='datetime-local'],
-    button {
+    /* button {
       max-width: 15rem;
       outline: none;
       border-radius: 0.5rem;
@@ -84,7 +83,7 @@ const StyledAddPost = styled.div`
     button {
       cursor: pointer;
       padding: 0.5rem;
-    }
+    } */
     .dnd {
       margin-bottom: 1rem;
       .dnd-zone {
@@ -105,6 +104,7 @@ const StyledAddPost = styled.div`
 `;
 
 const ThumbsContainer = styled.aside`
+  min-height: 10rem;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -291,6 +291,7 @@ const AddPost = () => {
                   placeholder="Pick date"
                   label="Post date and time"
                   required
+                  style={{ width: '20rem' }}
                   minDate={dayjs(new Date()).toDate()}
                   maxDate={dayjs(new Date())
                     .endOf('month')
@@ -306,42 +307,39 @@ const AddPost = () => {
           } else if (k === 'app') {
             return (
               <React.Fragment key={k}>
-                <RadioGroup
-                  key={k}
-                  orientation="vertical"
+                <Select
                   label="App"
-                  required
+                  placeholder="Pick one"
+                  style={{ width: '20rem' }}
                   onChange={(e) => {
                     updateFormData(k, e);
                   }}
-                >
-                  <Radio
-                    value="adidas CONFIRMED"
-                    label="adidas CONFIRMED"
-                    required
-                  />
-                  <Radio value="Nike SNKRS" label="Nike SNKRS" required />
-                  <Radio value="Nike" label="Nike" required />
-                </RadioGroup>
+                  data={[
+                    { value: 'adidas CONFIRMED', label: 'adidas CONFIRMED' },
+                    { value: 'Nike SNKRS', label: 'Nike SNKRS' },
+                    { value: 'Nike', label: 'Nike' },
+                  ]}
+                />
                 <Space h="sm" />
               </React.Fragment>
             );
           } else if (k === 'dropType') {
             return (
               <React.Fragment key={k}>
-                <RadioGroup
-                  key={k}
-                  orientation="vertical"
-                  label="Drop type"
-                  required
+                <Select
+                  label="App"
+                  placeholder="Pick one"
+                  style={{ width: '20rem' }}
                   onChange={(e) => {
+                    console.log(e);
                     updateFormData(k, e);
                   }}
-                >
-                  <Radio value="LEO" label="LEO" />
-                  <Radio value="DAN" label="DAN" />
-                  <Radio value="none" label="none" />
-                </RadioGroup>
+                  data={[
+                    { value: 'LEO', label: 'LEO' },
+                    { value: 'DAN', label: 'DAN' },
+                    { value: '', label: 'none' },
+                  ]}
+                />
                 <Space h="sm" />
               </React.Fragment>
             );
@@ -351,6 +349,7 @@ const AddPost = () => {
                 <NumberInput
                   key={k}
                   required
+                  style={{ width: '20rem' }}
                   label={columns[k]}
                   placeholder=""
                   hideControls
@@ -368,6 +367,7 @@ const AddPost = () => {
                 <NumberInput
                   key={k}
                   required
+                  style={{ width: '20rem' }}
                   label={columns[k]}
                   placeholder=""
                   hideControls
@@ -385,6 +385,7 @@ const AddPost = () => {
                 <TextInput
                   key={k}
                   required
+                  style={{ width: '20rem' }}
                   label={columns[k]}
                   placeholder=""
                   onChange={(e) => {
@@ -401,12 +402,22 @@ const AddPost = () => {
             <input {...getInputProps()} />
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
-
-          <ThumbsContainer>{thumbs}</ThumbsContainer>
+          {thumbs.length > 0 ? (
+            <ThumbsContainer>{thumbs}</ThumbsContainer>
+          ) : (
+            <ThumbsContainer>
+              <Center style={{ width: '100%' }}>No images uploaded</Center>
+            </ThumbsContainer>
+          )}
         </div>
-        <button disabled={false} onClick={submitForm}>
+        <Button
+          variant="filled"
+          disabled={false}
+          onClick={submitForm}
+          style={{ maxWidth: '15rem' }}
+        >
           Confirm
-        </button>
+        </Button>
       </form>
     </StyledAddPost>
   );

@@ -48,7 +48,7 @@ const App = () => {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Login setToken={setToken} />;
+        <Login setToken={setToken} />
       </MantineProvider>
     );
   }

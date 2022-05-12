@@ -32,10 +32,12 @@ const StyledLoggedUser = styled.div`
     .name {
       font-size: 1.2rem;
       font-weight: 500;
+      margin: -0.2rem 0;
     }
     .role {
       font-size: 1rem;
       font-weight: 300;
+      margin: -0.2rem 0;
     }
   }
 `;

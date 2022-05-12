@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
 import { Navigate, useParams } from 'react-router-dom';
@@ -63,7 +62,7 @@ const Post = (abc: any) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [postId, token]);
+  }, [postId, setToken, token]);
 
   useEffect(() => {
     if (post) {
