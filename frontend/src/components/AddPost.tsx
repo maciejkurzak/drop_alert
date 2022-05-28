@@ -28,6 +28,9 @@ import { RadioGroup, Radio } from '@mantine/core';
 import React from 'react';
 
 const StyledAddPost = styled.div`
+  overflow-y: auto;
+  max-height: 100%;
+  padding-right: 20px;
   form {
     display: flex;
     flex-direction: column;
@@ -331,7 +334,6 @@ const AddPost = () => {
                   placeholder="Pick one"
                   style={{ width: '20rem' }}
                   onChange={(e) => {
-                    console.log(e);
                     updateFormData(k, e);
                   }}
                   data={[

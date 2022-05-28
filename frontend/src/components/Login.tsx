@@ -59,8 +59,9 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
   const useStyles = createStyles((theme) => ({
     wrapper: {
       minHeight: 900,
+      height: '100vh',
       backgroundSize: 'cover',
-      backgroundImage: 'url(https://i.imgur.com/cj7nh83.jpg)',
+      backgroundImage: 'url(https://i.imgur.com/Yo1cHVG.jpg)',
     },
 
     form: {
@@ -72,6 +73,7 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
       minHeight: 900,
       maxWidth: 450,
       paddingTop: 80,
+      height: '100%',
 
       [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
         maxWidth: '100%',

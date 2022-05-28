@@ -6,6 +6,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Button, Group, Space } from '@mantine/core';
 
 const StyledPost = styled.div`
+  overflow-y: auto;
+  max-height: 100%;
+  padding-right: 20px;
   width: 100%;
   .data {
     display: flex;
@@ -74,14 +77,14 @@ const Post = (abc: any) => {
   }, [post]);
 
   const columns: any = {
-    shoeModel: 'shoe model',
-    shoeColor: 'shoe color',
-    retailPrice: 'retail price',
-    resellPrice: 'resell price',
-    dateTime: 'date time',
-    dropType: 'drop type',
-    app: 'app',
-    images: 'images',
+    shoeModel: 'Shoe model',
+    shoeColor: 'Shoe color',
+    retailPrice: 'Retail price',
+    resellPrice: 'Resell price',
+    dateTime: 'Post date and time',
+    dropType: 'Drop type',
+    app: 'App',
+    images: 'Images',
   };
 
   const deletePost = () => {
