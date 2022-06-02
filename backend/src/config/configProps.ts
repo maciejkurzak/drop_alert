@@ -6,7 +6,8 @@ export interface configProps {
   shoeColor: string;
   retailPrice: string;
   resellPrice?: string;
-  dateTime: string;
+  date: string;
+  time: string;
   dropType: 'LEO' | 'DAN' | null;
   app: 'adidas CONFIRMED' | 'Nike SNKRS' | 'Nike';
 }

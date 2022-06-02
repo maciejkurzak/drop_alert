@@ -5,14 +5,23 @@ import {
   Dispatch,
   SetStateAction,
 } from 'react';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pl';
+
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
+
+import {
+  Calendar,
+  Clock,
+  ColorSwatch,
+  CurrencyDollar,
+  DeviceMobile,
+} from 'tabler-icons-react';
+
 import styled from 'styled-components';
 import useToken from '../hooks/useToken';
-
-import SweetAlert from 'sweetalert-react';
-import 'sweetalert/dist/sweetalert.css';
 
 import {
   TextInput,
@@ -22,74 +31,15 @@ import {
   Center,
   Select,
 } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
-import { useForm } from '@mantine/form';
-import { RadioGroup, Radio } from '@mantine/core';
+import { DatePicker, TimeInput } from '@mantine/dates';
 import React from 'react';
 
 const StyledAddPost = styled.div`
-  overflow-y: auto;
-  max-height: 100%;
   padding-right: 20px;
-  form {
-    display: flex;
-    flex-direction: column;
-    .form-el {
-      display: flex;
-      flex-direction: column;
-      &:not(:last-child) {
-        margin-bottom: 1rem;
-      }
-      .app-select {
-        input {
-          width: 1rem;
-          height: 1rem;
-          border-radius: 0;
-        }
-        label {
-          margin-left: 0.5rem;
-          color: rgba(255, 255, 255, 0.75);
-        }
-      }
-    }
-    .form-el > .form-el-name {
-      margin-bottom: 0.25rem;
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 1);
-    }
-    .form-el > input[type='text'],
-    .form-el > input[type='datetime-local'],
-    /* button {
-      max-width: 15rem;
-      outline: none;
-      border-radius: 0.5rem;
-      padding: 0.3rem 0.5rem;
-      color: rgba(255, 255, 255, 0.75);
-      background-color: rgba(255, 255, 255, 0.05);
-      border: solid 2px rgba(255, 255, 255, 0.25);
-      font-size: 1rem;
-      &:focus {
-        color: rgba(255, 255, 255, 1);
-        background-color: rgba(255, 255, 255, 0.1);
-        border: solid 2px rgba(255, 255, 255, 0.5);
-      }
-      &:hover {
-        border: solid 2px rgba(255, 255, 255, 0.5);
-      }
-      &:disabled {
-        color: rgba(255, 255, 255, 0.5);
-        background-color: rgba(255, 255, 255, 0.05);
-        border: solid 2px rgba(255, 255, 255, 0.25);
-        cursor: not-allowed;
-      }
-    }
-    button {
-      cursor: pointer;
-      padding: 0.5rem;
-    } */
     .dnd {
       margin-bottom: 1rem;
       .dnd-zone {
+        cursor: pointer;
         height: 5rem;
         display: flex;
         align-items: center;
@@ -150,7 +100,8 @@ const columns: any = {
   shoeColor: 'Shoe color',
   retailPrice: 'Retail price',
   resellPrice: 'Resell price',
-  dateTime: 'Post date and time',
+  date: 'Drop date',
+  time: 'Drop time',
   dropType: 'Drop type',
   app: 'App',
   images: 'Images',
@@ -160,7 +111,6 @@ let form = new FormData();
 const AddPost = () => {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
-  // const [formData, setFormData] = useState({});
   const [files, setFiles]: [any, any] = useState([]);
 
   const maxSize = 1048576 * 10;
@@ -270,13 +220,13 @@ const AddPost = () => {
 
   return (
     <StyledAddPost>
-      <SweetAlert
+      {/* <SweetAlert
         show={error.show}
         title="Error"
         text={error.message}
         type="error"
         onConfirm={() => setError({ show: false, message: '' })}
-      />
+      /> */}
       <h1>Add Post</h1>
       <Space h="md" />
       <form>
@@ -287,21 +237,54 @@ const AddPost = () => {
                 <div className="form-el-name">{columns[k]}</div>{' '}
               </div>
             );
-          } else if (k === 'dateTime') {
+          } else if (k === 'date') {
             return (
               <React.Fragment key={k}>
                 <DatePicker
                   placeholder="Pick date"
-                  label="Post date and time"
+                  label="Drop date"
                   required
                   style={{ width: '20rem' }}
+                  icon={<Calendar size={16} />}
                   minDate={dayjs(new Date()).toDate()}
-                  maxDate={dayjs(new Date())
-                    .endOf('month')
-                    .subtract(5, 'days')
-                    .toDate()}
+                  maxDate={dayjs(new Date()).add(30, 'days').toDate()}
+                  locale="pl"
+                  inputFormat="DD MMMM YYYY"
+                  labelFormat="DD MMMM YYYY"
+                  clearable={false}
+                  onChange={(e: any) => {
+                    const date = e
+                      ? `${
+                          e.getDate() < 10 ? '0' + e.getDate() : e.getDate()
+                        }.${
+                          e.getMonth() < 9
+                            ? '0' + (e.getMonth() + 1)
+                            : e.getMonth() + 1
+                        }.${e.getFullYear()}`
+                      : '';
+                    updateFormData(k, date);
+                  }}
+                />
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'time') {
+            return (
+              <React.Fragment key={k}>
+                <TimeInput
+                  label="Drop time"
+                  required
+                  style={{ width: '20rem' }}
+                  icon={<Clock size={16} />}
                   onChange={(e) => {
-                    updateFormData(k, e);
+                    const time = `${
+                      e.getHours() < 10 ? '0' + e.getHours() : e.getHours()
+                    }:${
+                      e.getMinutes() < 10
+                        ? '0' + e.getMinutes()
+                        : e.getMinutes()
+                    }`;
+                    updateFormData(k, time);
                   }}
                 />
                 <Space h="sm" />
@@ -317,6 +300,7 @@ const AddPost = () => {
                   onChange={(e) => {
                     updateFormData(k, e);
                   }}
+                  icon={<DeviceMobile size={16} />}
                   data={[
                     { value: 'adidas CONFIRMED', label: 'adidas CONFIRMED' },
                     { value: 'Nike SNKRS', label: 'Nike SNKRS' },
@@ -330,17 +314,37 @@ const AddPost = () => {
             return (
               <React.Fragment key={k}>
                 <Select
-                  label="App"
+                  label="Drop type"
                   placeholder="Pick one"
                   style={{ width: '20rem' }}
                   onChange={(e) => {
                     updateFormData(k, e);
                   }}
+                  icon={<ColorSwatch size={16} />}
                   data={[
                     { value: 'LEO', label: 'LEO' },
                     { value: 'DAN', label: 'DAN' },
                     { value: '', label: 'none' },
                   ]}
+                />
+                <Space h="sm" />
+              </React.Fragment>
+            );
+          } else if (k === 'retailPrice') {
+            return (
+              <React.Fragment key={k}>
+                <NumberInput
+                  key={k}
+                  required
+                  icon={<CurrencyDollar size={16} />}
+                  style={{ width: '20rem' }}
+                  label={columns[k]}
+                  placeholder=""
+                  hideControls
+                  min={0}
+                  onChange={(e: any) => {
+                    updateFormData(k, e);
+                  }}
                 />
                 <Space h="sm" />
               </React.Fragment>
@@ -356,24 +360,7 @@ const AddPost = () => {
                   placeholder=""
                   hideControls
                   min={0}
-                  onChange={(e: any) => {
-                    updateFormData(k, e);
-                  }}
-                />
-                <Space h="sm" />
-              </React.Fragment>
-            );
-          } else if (k === 'retailPrice') {
-            return (
-              <React.Fragment key={k}>
-                <NumberInput
-                  key={k}
-                  required
-                  style={{ width: '20rem' }}
-                  label={columns[k]}
-                  placeholder=""
-                  hideControls
-                  min={0}
+                  icon={<CurrencyDollar size={16} />}
                   onChange={(e: any) => {
                     updateFormData(k, e);
                   }}
@@ -418,7 +405,7 @@ const AddPost = () => {
           onClick={submitForm}
           style={{ maxWidth: '15rem' }}
         >
-          Confirm
+          Add Post
         </Button>
       </form>
     </StyledAddPost>

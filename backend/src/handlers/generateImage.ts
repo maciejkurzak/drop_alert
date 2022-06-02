@@ -48,7 +48,7 @@ export const generateImage = async (data: any, imagePath: string, number: number
   context.font = '48px Rubik';
   context.fillStyle = '#00000040';
   context.textAlign = 'center';
-  context.fillText(kernedText('@drop_alert'), -540, 1060);
+  context.fillText(kernedText('@dropeepl'), -540, 1060);
 
   context.rotate((90 * Math.PI) / 180);
 
@@ -89,25 +89,18 @@ export const generateImage = async (data: any, imagePath: string, number: number
     context.textAlign = 'left';
     context.fillText(kernedText(data.shoeColor), 30, canvas.height - 210);
 
-    // ADDING DROP DATE ANT TYPE
-
-    // const day = data.dateTime.day.toString();
-    // const month = months[data.dateTime.month - 1];
-    // const year = data.dateTime.year.toString();
-
+    // ADDING DROP DATE AND TYPE
     context.font = '40px Rubik Medium';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
 
-    // context.fillText(kernedText(`${day} ${month} ${year}`), 150, 70);
+    context.fillText(kernedText(data.date), 150, 70);
 
     context.font = '32px Rubik Light';
     context.fillStyle = '#000000';
     context.textAlign = 'left';
 
-    // const hour = data.dateTime.time;
-
-    // context.fillText(kernedText(`${hour} ${data.dropType ? '(' + data.dropType + ')' : ''}`), 150, 120);
+    context.fillText(kernedText(`${data.time} ${data.dropType ? '(' + data.dropType + ')' : ''}`), 150, 120);
   }
 
   // canvas clipping function

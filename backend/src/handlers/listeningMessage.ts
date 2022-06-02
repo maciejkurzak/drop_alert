@@ -5,7 +5,7 @@ import { initMsg, debug, error, warning } from '../handlers/chalkFunctions.js';
 const listeningMessage = (port: number) => {
   console.log('\n');
   figlet.text(
-    'drop_alert',
+    'dropee.pl',
     {
       // font: 'Dr Pepper',
       font: 'Larry 3D',
@@ -19,7 +19,7 @@ const listeningMessage = (port: number) => {
     initMsg('\n');
     initMsg(`                ╔════════════════════════════════╗`);
     initMsg(`                ║                                ║`);
-    initMsg(`                ║           drop_alert           ║`);
+    initMsg(`                ║            dropee.pl           ║`);
     initMsg(`                ║     http://localhost:${port}/     ║`);
     initMsg(`                ║                                ║`);
     initMsg(`                ╚════════════════════════════════╝`);

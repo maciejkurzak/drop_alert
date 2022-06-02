@@ -9,6 +9,7 @@ import SideBar from './components/Sidebar/Sidebar';
 import AddPost from './components/AddPost';
 import Posts from './components/Posts';
 import Login from './components/Login';
+import AddUser from './components/AddUser';
 
 import useToken from './hooks/useToken';
 import Post from './components/Post';
@@ -24,12 +25,11 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   routerView: {
     width: '100%',
     minHeight: '100%',
-    margin: '2rem',
     padding: '1rem',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '0.5rem',
+    overflowY: 'auto',
+    maxHeight: '100%',
     fontFamily: 'Rubik, sans-serif',
   },
 }));
@@ -69,7 +69,8 @@ const App = () => {
             <Route path="/" element={<Navigate replace to="/posts" />}></Route>
             <Route path="/posts/:postId" element={<Post abc={'123'} />} />
             <Route path="/posts" element={<Posts />}></Route>
-            <Route path="add-post" element={<AddPost />} />
+            <Route path="/add-post" element={<AddPost />} />
+            <Route path="/add-user" element={<AddUser />} />
           </Routes>
         </div>
       </MantineProvider>

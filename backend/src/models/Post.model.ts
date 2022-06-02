@@ -22,7 +22,11 @@ const PostSchema = new Schema<databasePostProps>({
     required: false,
     min: 1,
   },
-  dateTime: {
+  date: {
+    type: String,
+    required: true,
+  },
+  time: {
     type: String,
     required: true,
   },

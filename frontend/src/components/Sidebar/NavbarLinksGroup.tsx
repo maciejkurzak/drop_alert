@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'tabler-icons-react';
+import { useStore } from '../../store/userData';
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -68,7 +69,9 @@ const useStyles = createStyles((theme) => ({
 
 interface LinksGroupProps {
   icon: TablerIcon;
+  color: string;
   label: string;
+  userGroups: string[];
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
 }
@@ -78,6 +81,8 @@ export function LinksGroup({
   label,
   initiallyOpened,
   links,
+  color,
+  userGroups,
 }: LinksGroupProps) {
   const { classes, theme } = useStyles();
   const hasLinks = Array.isArray(links);
@@ -95,40 +100,48 @@ export function LinksGroup({
     </Text>
   ));
 
-  return (
-    <>
-      <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
-        className={classes.control}
-      >
-        <Group position="apart" spacing={0}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant="light" size={30}>
-              <Icon size={18} />
-            </ThemeIcon>
-            <Box ml="md">{label}</Box>
-          </Box>
-          {hasLinks && (
-            <ChevronIcon
-              className={classes.chevron}
-              size={14}
-              style={{
-                transform: opened
-                  ? `rotate(${theme.dir === 'rtl' ? -90 : 90}deg)`
-                  : 'none',
-              }}
-            />
-          )}
-        </Group>
-      </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
-    </>
-  );
+  const loggedUser = JSON.parse(useStore((state) => state.loggedUser)).user;
+
+  if (userGroups.includes(loggedUser.role)) {
+    return (
+      <>
+        <UnstyledButton
+          onClick={() => setOpened((o) => !o)}
+          className={classes.control}
+        >
+          <Group position="apart" spacing={0}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ThemeIcon variant="light" color={color} size={30}>
+                <Icon size={18} />
+              </ThemeIcon>
+              <Box ml="md">{label}</Box>
+            </Box>
+            {hasLinks && (
+              <ChevronIcon
+                className={classes.chevron}
+                size={14}
+                style={{
+                  transform: opened
+                    ? `rotate(${theme.dir === 'rtl' ? -90 : 90}deg)`
+                    : 'none',
+                }}
+              />
+            )}
+          </Group>
+        </UnstyledButton>
+        {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      </>
+    );
+  } else {
+    return null;
+  }
 }
 
 const mockdata = {
   label: 'Releases',
   icon: CalendarStats,
+  color: 'green',
+  userGroups: ['user', 'admin'],
   links: [
     { label: 'Upcoming releases', link: '/' },
     { label: 'Previous releases', link: '/' },

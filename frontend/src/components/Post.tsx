@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import useToken from '../hooks/useToken';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { Button, Group, Space } from '@mantine/core';
+import { Modal, Button, Group, Space, Text } from '@mantine/core';
 
 const StyledPost = styled.div`
-  overflow-y: auto;
-  max-height: 100%;
   padding-right: 20px;
   width: 100%;
   .data {
@@ -41,6 +39,7 @@ const Post = (abc: any) => {
   const [post, setPost] = useState() as [any, any];
   const [images, setImages]: [any, any] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [opened, setOpened] = useState(false);
 
   const { postId } = useParams();
 
@@ -63,7 +62,7 @@ const Post = (abc: any) => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, [postId, setToken, token]);
 
@@ -81,32 +80,35 @@ const Post = (abc: any) => {
     shoeColor: 'Shoe color',
     retailPrice: 'Retail price',
     resellPrice: 'Resell price',
-    dateTime: 'Post date and time',
+    date: 'Drop date',
+    time: 'Drop time',
     dropType: 'Drop type',
     app: 'App',
     images: 'Images',
   };
 
   const deletePost = () => {
-    fetch(`http://localhost:5100/api/post/${postId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if ([401, 403].includes(res.status)) {
-          setToken('');
-          window.location.reload();
-        } else if ([200, 404].includes(res.status)) {
-          setIsLoading(false);
-        } else {
-          console.log('error');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log('delete');
+    setOpened(true);
+    // fetch(`http://localhost:5100/api/post/${postId}`, {
+    //   method: 'DELETE',
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // })
+    //   .then((res) => {
+    //     if ([401, 403].includes(res.status)) {
+    //       setToken('');
+    //       window.location.reload();
+    //     } else if ([200, 404].includes(res.status)) {
+    //       setIsLoading(false);
+    //     } else {
+    //       console.log('error');
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   if (!isLoading && !post) {
@@ -123,49 +125,73 @@ const Post = (abc: any) => {
 
   if (post) {
     return (
-      <StyledPost>
-        <Group>
-          <h1>Post</h1>
-          <Button variant="light" size="xs" onClick={deletePost}>
-            Delete Post
-          </Button>
-        </Group>
-        <Space h="md" />
-        <div className="data">
-          {Object.keys(columns).map((k: any) => {
-            if (k === 'dateTime') {
-              return (
-                <div key={k} className="data-el">
-                  <h3>{columns[k]}</h3>
-                </div>
-              );
-            } else if (k === 'images') {
-              return (
-                <div key={k} className="data-el">
-                  <h3>{columns[k]}</h3>
-                  <div className="images">
-                    {images.map((el: any, index: number) => {
-                      return (
-                        <img
-                          key={el}
-                          src={`http://localhost:5100/public/output/${el}`}
-                          alt="alt"
-                        ></img>
-                      );
-                    })}
+      <>
+        <Modal
+          centered
+          opened={opened}
+          onClose={() => setOpened(false)}
+          withCloseButton={false}
+        >
+          <Text size="xl">Are you sure you want to delete this post?</Text>
+          <Space h="md" />
+          <Group spacing="xs">
+            <Button>Delete</Button>
+            <Button variant="default" onClick={() => setOpened(false)}>
+              Cancel
+            </Button>
+          </Group>
+        </Modal>
+        <StyledPost>
+          <Group>
+            <h1>Post</h1>
+            <Button variant="light" size="xs" onClick={deletePost}>
+              Delete Post
+            </Button>
+          </Group>
+          <Space h="md" />
+          <div className="data">
+            {Object.keys(columns).map((k: any) => {
+              if (k === 'date') {
+                return (
+                  <div key={k} className="data-el">
+                    <h3>{columns[k]}</h3>
                   </div>
+                );
+              }
+              if (k === 'time') {
+                return (
+                  <div key={k} className="data-el">
+                    <h3>{columns[k]}</h3>
+                  </div>
+                );
+              } else if (k === 'images') {
+                return (
+                  <div key={k} className="data-el">
+                    <h3>{columns[k]}</h3>
+                    <div className="images">
+                      {images.map((el: any, index: number) => {
+                        return (
+                          <img
+                            key={el}
+                            src={`http://localhost:5100/public/output/${el}`}
+                            alt="alt"
+                          ></img>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div key={k} className="data-el">
+                  <h3>{columns[k]}</h3>
+                  <p>{post && post[k]}</p>
                 </div>
               );
-            }
-            return (
-              <div key={k} className="data-el">
-                <h3>{columns[k]}</h3>
-                <p>{post && post[k]}</p>
-              </div>
-            );
-          })}
-        </div>
-      </StyledPost>
+            })}
+          </div>
+        </StyledPost>
+      </>
     );
   }
 

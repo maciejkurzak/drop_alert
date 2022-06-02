@@ -15,16 +15,29 @@ import {
 import { UserButton } from './UserButton';
 import { LinksGroup } from './NavbarLinksGroup';
 
-import { CalendarStats, Logout } from 'tabler-icons-react';
+import { CalendarStats, Logout, Users } from 'tabler-icons-react';
 
 const mockdata = [
   {
     label: 'Posts',
     icon: CalendarStats,
+    color: 'blue',
     initiallyOpened: true,
+    userGroups: ['user', 'admin'],
     links: [
-      { label: 'Planned Posts', link: '/posts' },
       { label: 'Add New Post', link: '/add-post' },
+      { label: 'Planned Posts', link: '/posts' },
+    ],
+  },
+  {
+    label: 'Accounts',
+    icon: Users,
+    color: 'teal',
+    initiallyOpened: false,
+    userGroups: ['admin'],
+    links: [
+      { label: 'Add New User', link: '/add-user' },
+      { label: 'Manage Users', link: '/users' },
     ],
   },
 ];
@@ -116,7 +129,7 @@ const SideBar = () => {
       className={classes.navbar}
     >
       <Navbar.Section className={classes.header}>
-        <h2>drop_alert</h2>
+        <h2>dropee.pl</h2>
       </Navbar.Section>
 
       <Navbar.Section grow className={classes.links} component={ScrollArea}>

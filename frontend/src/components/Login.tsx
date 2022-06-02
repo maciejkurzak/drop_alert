@@ -106,7 +106,7 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
           mt="md"
           mb={50}
         >
-          drop_alert
+          dropee.pl
         </Title>
         <form onSubmit={handleSubmit}>
           <TextInput

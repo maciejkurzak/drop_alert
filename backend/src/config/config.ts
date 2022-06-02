@@ -8,7 +8,8 @@ export const config: configProps = {
   shoeColor: 'Mineral Slate Suede',
   retailPrice: '549',
   resellPrice: '700 - 800',
-  dateTime: '2010-04-10T10:00',
+  date: '01 stycznia 2137',
+  time: '04:20',
   dropType: 'LEO',
   app: 'Nike SNKRS',
 };
