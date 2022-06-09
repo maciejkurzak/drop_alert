@@ -88,27 +88,25 @@ const Post = (abc: any) => {
   };
 
   const deletePost = () => {
-    console.log('delete');
-    setOpened(true);
-    // fetch(`http://localhost:5100/api/post/${postId}`, {
-    //   method: 'DELETE',
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // })
-    //   .then((res) => {
-    //     if ([401, 403].includes(res.status)) {
-    //       setToken('');
-    //       window.location.reload();
-    //     } else if ([200, 404].includes(res.status)) {
-    //       setIsLoading(false);
-    //     } else {
-    //       console.log('error');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    fetch(`http://localhost:5100/api/post/${postId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if ([401, 403].includes(res.status)) {
+          setToken('');
+          window.location.reload();
+        } else if ([200, 404].includes(res.status)) {
+          setIsLoading(false);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   if (!isLoading && !post) {
@@ -134,8 +132,8 @@ const Post = (abc: any) => {
         >
           <Text size="xl">Are you sure you want to delete this post?</Text>
           <Space h="md" />
-          <Group spacing="xs">
-            <Button>Delete</Button>
+          <Group spacing="xs" position="right">
+            <Button onClick={deletePost}>Delete</Button>
             <Button variant="default" onClick={() => setOpened(false)}>
               Cancel
             </Button>
@@ -144,7 +142,7 @@ const Post = (abc: any) => {
         <StyledPost>
           <Group>
             <h1>Post</h1>
-            <Button variant="light" size="xs" onClick={deletePost}>
+            <Button variant="light" size="xs" onClick={() => setOpened(true)}>
               Delete Post
             </Button>
           </Group>
@@ -172,7 +170,7 @@ const Post = (abc: any) => {
                       {images.map((el: any, index: number) => {
                         return (
                           <img
-                            key={el}
+                            key={index}
                             src={`http://localhost:5100/public/output/${el}`}
                             alt="alt"
                           ></img>

@@ -8,7 +8,7 @@ export interface configProps {
   resellPrice?: string;
   date: string;
   time: string;
-  dropType: 'LEO' | 'DAN' | null;
+  dropType: 'LEO' | 'DAN' | '';
   app: 'adidas CONFIRMED' | 'Nike SNKRS' | 'Nike';
 }
 

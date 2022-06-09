@@ -32,7 +32,7 @@ const PostSchema = new Schema<databasePostProps>({
   },
   dropType: {
     type: String,
-    enum: ['LEO', 'DAN', null],
+    enum: ['LEO', 'DAN', ''],
   },
   app: {
     type: String,

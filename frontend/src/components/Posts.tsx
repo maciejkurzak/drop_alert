@@ -48,8 +48,8 @@ const Posts = () => {
         })
         .then((res) => {
           setPosts(
-            res.posts.map((element: any) => (
-              <tr key={element.shoeModel}>
+            res.posts.map((element: any, index: number) => (
+              <tr key={index}>
                 <Td to={element._id}>{element.shoeModel}</Td>
                 <Td to={element._id}>{element.shoeColor}</Td>
                 <Td to={element._id}>{element.date}</Td>
@@ -80,8 +80,8 @@ const Posts = () => {
       <Table verticalSpacing="sm" highlightOnHover>
         <thead>
           <tr>
-            {Object.keys(columns).map((i: any) => {
-              return <th key={i}>{columns[i]}</th>;
+            {Object.keys(columns).map((value: string) => {
+              return <th key={value}>{columns[value]}</th>;
             })}
           </tr>
         </thead>
