@@ -1,5 +1,5 @@
 # drop_alert
-### drop_alert is an app made for creating and uploading posts informing about upcoming shoes/clothing drops, from eg. Nike SNKRS or Adidas CONFIRMED, to social media channels.
+ drop_alert is an app made for creating and uploading posts informing about upcoming shoes/clothing drops, from eg. Nike SNKRS or Adidas CONFIRMED, to social media channels.
 
 
 ## How it works (plan):
