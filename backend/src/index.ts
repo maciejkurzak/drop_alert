@@ -92,6 +92,17 @@ app.use('/api/add-post', addPostRoute);
 
 // ===================================================
 
+// INSTAGRAM API
+
+import { Client, GetPageInfoRequest, GetPageMediaRequest } from 'instagram-graph-api';
+
+let client: Client = new Client(ACCESS_TOKEN, PAGE_ID);
+
+let pageInfoRequest: GetPageInfoRequest = client.newGetPageInfoRequest();
+let pageMediaRequest: GetPageMediaRequest = client.newGetPageMediaRequest();
+
+// ===================================================
+
 // SERVING EXPRESS BACKEND
 
 app.listen(port, () => {
